@@ -1,1 +1,18 @@
 Hello
+
+<script>
+  
+  var requestOptions = {
+    body: `code=c4fbd1cb76344e01a966598dc5e2d4dd&client_id=cd6f88563f0e41f3b88856c9199e7e71&client_secret=32747c33b09240e981f0e57eaae0872e&grant_type=authorization_code&scope=authorization:grant`,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    'muteHttpExceptions': true,
+    method: "POST"
+  };
+
+  let result = fetch("https://api.tink.com/api/v1/oauth/token", requestOptions);
+
+  console.log(result.getContentText());
+  
+</script>
