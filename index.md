@@ -6,7 +6,7 @@
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
  - Conway's game of life, implemented in Python with pygame:
 
-![](https://github.com/avisemler/avisemler.github.io/blob/main/files/screenshot.jpg)
+![](/files/screenshot.jpg)
 
 # Game development
  - Shader for Panda3D game engine:
