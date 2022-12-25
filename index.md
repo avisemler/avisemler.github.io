@@ -4,7 +4,7 @@
  - Simulator of the enigma machine in Python: [https://github.com/avisemler/enigma_simulator](https://github.com/avisemler/enigma_simulator)
  - [Some useful results from basic graph theory](/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
- - Conway's game of life, implemented in Python with pygame:
+ - [Conway's game of life](https://github.com/avisemler/game_of_life), implemented in Python with pygame:
 
 ![](/files/screenshot.jpg)
 
