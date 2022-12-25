@@ -1,4 +1,4 @@
-# Mathsy things
+# Mathsy/programming things
 
  - My [solutions to exercises and notes](/nnnotes/index.html) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
  - Simulator of the enigma machine in Python: [https://github.com/avisemler/enigma_simulator](https://github.com/avisemler/enigma_simulator)
