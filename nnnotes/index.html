@@ -365,7 +365,7 @@ code {
           : 'default'
     });
   </script>
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
 </script>
@@ -442,8 +442,8 @@ $$\frac{\partial C}{\partial w_{jk}^l}=a_k^{l-1}\delta_j^i$$.</p>
 <p>We view the activation function as $\Sigma:\mathbb{R}^n\rightarrow\mathbb{R}^n$, where $n$ is the size of the $L^{th}$ layer, with $\Sigma(z_1,\dots,z_n):=(\sigma(z_1),\dots,\sigma(z_n))$. Hence, its Jacobian matrix $\Sigma'(z)$ is an
 $n\times n$ matrix in the form</p>
 <p>$$\begin{pmatrix}
-\sigma'(z_1) &amp; 0 &amp; 0 &amp;\dots \
-0 &amp; \sigma'(z_2) &amp; 0 &amp; \dots \
+\sigma'(z_1) &amp; 0 &amp; 0 &amp;\dots \\
+0 &amp; \sigma'(z_2) &amp; 0 &amp; \dots \\
 \vdots
 \end{pmatrix}$$</p>
 <p>Now, we can view $C$ as a function of $z$ values as follows:</p>
