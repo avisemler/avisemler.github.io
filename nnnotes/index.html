@@ -14,7 +14,7 @@
 body {
 	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
 	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 10%;
+	padding: 0 26px;
 	line-height: var(--vscode-markdown-line-height, 22px);
 	word-wrap: break-word;
 }
@@ -309,7 +309,7 @@ pre code {
 
  body {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 11%;
+	padding: 0 12px;
 }
 
 pre {
@@ -370,7 +370,7 @@ code {
     MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
 </script>
 <h1 id="exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</h1>
-<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's very notation-heavy because I felt that the book contains sufficient explatation but shows less of the derivations.</p>
+<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's very notation-heavy because I felt that the book contains sufficient explatation but shows fewer symbolic derivations.</p>
 <ul>
 <li><a href="#exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</a></li>
 <li><a href="#chapter-2-backpropgation">Chapter 2: Backpropgation</a>
@@ -409,8 +409,8 @@ code {
 <h2 id="proof-of-equations">Proof of equations</h2>
 <h3 id="equation-1-error-in-output-layer">Equation 1: error in output layer</h3>
 <p>$$\delta_j^L=\frac{\partial C}{\partial a^L_j}\sigma'(z_j^L)$$</p>
-<p>Intuition: the error of neuron $j$ in last layer has two components: the sensitivity of cost to small changes in the activation, and the senitivity of the activation to small changes in the value of $z$.</p>
-<p>Proof: Using the definitions:</p>
+<p><strong>Intuition</strong>: the error of neuron $j$ in last layer has two components: the sensitivity of cost to small changes in the activation, and the senitivity of the activation to small changes in the value of $z$.</p>
+<p><strong>Proof</strong>: Using the definitions:</p>
 <p>$$\delta_j^L=\frac{\partial C}{\partial z_j^L}(a_1^L,\dots,a_n^L)=\frac{\partial C}{\partial z_j^L}(\sigma(z_1^L),\dots,\sigma(z_n^L))
 $$</p>
 <p>The only non-vanishing term in the sum that results when applying the chain rule is:</p>
@@ -419,24 +419,24 @@ $$</p>
 <h3 id="equation-2-error-in-layer-l-in-terms-of-error-in-layer-l1">Equation 2: Error in layer $l$ in terms of error in layer $l+1$</h3>
 <p>$$\delta_j^l=\Sigma_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l)$$</p>
 <p>This can also be written in matrix form, but I find this less intuitive.</p>
-<p>Intuition: the error depends on the error of every neuron
+<p><strong>Intuition</strong>: the error depends on the error of every neuron
 that it is connected to. But if the weight is low, the contribution of the connected neuron is low and vice versa, so we multiply by the weight. Also, if the derivative of sigma is low, then the value of $z$ is less consequential so multiply by that too.</p>
-<p>Proof: viewing $C$ as a function of the $z$ values in the next layer and using chain rule:</p>
+<p><strong>Proof</strong>: viewing $C$ as a function of the $z$ values in the next layer and using chain rule:</p>
 <p>$$\delta_j^l=\Sigma_k\frac{\partial C}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^l}=\Sigma_k\delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^l}$$</p>
 <p>Also, $z_k^{l+1}=b_k^{l+1}+\Sigma_iw_{ki}^l\sigma(z_{i}^l)$. Differentiate this, and substitute to get the result.</p>
 <h3 id="equation-3-derivative-wrt-biases">Equation 3: Derivative WRT biases</h3>
 <p>For a bias $b$ and the corresponding $\delta$:
 $$\frac{\partial C}{\partial b}=\delta$$</p>
-<p>Intuition: changing the bias by a small amount has the same effect as just directly changing the $z$-value directly.</p>
-<p>Proof:
+<p><strong>Intuition</strong>: changing the bias by a small amount has the same effect as just directly changing the $z$-value directly.</p>
+<p><strong>Proof</strong>:
 Applying the chain rule, the only non-vanishing term is
 $$\frac{\partial C}{\partial b}=\frac{\partial C}{\partial z}\frac{\partial z}{\partial b}=\delta\cdot 1$$</p>
 <p>because $\frac{\partial}{\partial b}(b+\Sigma_iw_i\dots)=1$</p>
 <h3 id="equation-4-derivative-wrt-weights">Equation 4: Derivative WRT weights</h3>
 <p>For a weight $w_{jk}^l$:
 $$\frac{\partial C}{\partial w_{jk}^l}=a_k^{l-1}\delta_j^i$$.</p>
-<p>Intuition: changing a weight effects the cost in proportion with the activation of the neuron that is &quot;feeding into&quot; the edge controlled by that weight.</p>
-<p>Proof: identical to previous but differentiate with respect to the weight instead of the bias.</p>
+<p><strong>Intuition</strong>: changing a weight effects the cost in proportion with the activation of the neuron that is &quot;feeding into&quot; the edge controlled by that weight.</p>
+<p><strong>Proof</strong>: identical to previous but differentiate with respect to the weight instead of the bias.</p>
 <h2 id="exercise-matrix-forms">Exercise: matrix forms</h2>
 <h3 id="equation-1">Equation 1</h3>
 <p>We view the activation function as $\Sigma:\mathbb{R}^n\rightarrow\mathbb{R}^n$, where $n$ is the size of the $L^{th}$ layer, with $\Sigma(z_1,\dots,z_n):=(\sigma(z_1),\dots,\sigma(z_n))$. Hence, its Jacobian matrix $\Sigma'(z)$ is an
@@ -452,8 +452,8 @@ $n\times n$ matrix in the form</p>
 <p>$$\delta^L=\nabla C\circ \Sigma (z_1^L,\dots, z_n^L)=(\partial C\circ \Sigma (z_1^L,\dots, z_n^L))^T$$</p>
 <p>Applying the chain rule:</p>
 <p>$$\delta^L=(\partial C(\Sigma (z_1^L,\dots, z_n^L))\Sigma' (z_1^L,\dots, z_n^L))^T$$</p>
-<p>Distributing the tranposition:</p>
-<p>$$=\nabla C(\Sigma (z_1^L,\dots, z_n^L))\Sigma' (z_1^L,\dots, z_n^L)$$</p>
+<p>Distributing the tranposition using $(AB)^T=B^TA^T$:</p>
+<p>$$= \Sigma' (z_1^L,\dots, z_n^L)\nabla C(\Sigma (z_1^L,\dots, z_n^L))$$</p>
 <p>because $\Sigma'$ is symmetric. This then simplifies to the desired result using $a^L=\Sigma(z^L)$.</p>
 <h3 id="equation-2">Equation 2</h3>
 <p>Follows from an analogous modification of the proof of the componentwise version of equation 2.</p>
@@ -461,6 +461,22 @@ $n\times n$ matrix in the form</p>
 <p>This is &quot;telescoping out&quot; the recurrence for $\delta^l$ in terms of $\delta^{l+1}$.</p>
 <h2 id="using-matrices-for-minibatches">Using matrices for minibatches</h2>
 <p>This is a modification of the algorithm to avoid having to iterate over the minibatch, by storing it as the columns of a matrix.</p>
-
+<p><strong>Input</strong>: The $m$ training examples $x_1,\dots,x_m$ that belong to the minibatch. Store these as an $r\times m$ matrix of activations (where $r$ is the size of each $x_i$):</p>
+<p>$$A=\begin{pmatrix}
+x_1, &amp; \dots ,&amp; x_m
+\end{pmatrix}$$</p>
+<p>Create a similar matrix $b^l$ to store biases, with duplicated columns.</p>
+<p><strong>Feedforward</strong>: In this stage of the algorithm, we want to update $A$ once for each layer in the network. Multiplying $A$ by the weights matrices has the desired effect.</p>
+<p>For $2\leq l \leq L$:</p>
+<p>$A\gets w^lA, A\gets A+b^l, Z^l\gets A, A\gets\sigma(A)$</p>
+<p><strong>Error from the output layer</strong>:</p>
+<p>$\delta^L\gets \nabla C(A)\odot\sigma'(Z^L)$</p>
+<p>applying $\sigma'$ elementwise.</p>
+<p><strong>Backpropogation</strong>: Again, all operations can be applied as usual on the larger matrix to obtain $\delta^1,\dots,\delta^{L-1}$.</p>
+<p><strong>Gradient descent</strong>:</p>
+<p>In this stage, we must average the rows of the $\delta$s to find the size of the adjustements to be made to the weights and biases. I think the most performative way to do this is to iterate, or maybe multiplying with a matrix of 1s is easier (???).</p>
+<style>
+    body{padding:0 10%}
+</style>
 </body>
 </html>
