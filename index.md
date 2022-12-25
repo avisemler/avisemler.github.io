@@ -4,3 +4,8 @@
  - Simulator of the enigma machine in Python: [https://github.com/avisemler/enigma_simulator](https://github.com/avisemler/enigma_simulator)
  - [Some useful results from basic graph theory](/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
+ - Shader for Panda3D game engine:
+ 
+ ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
+
+
