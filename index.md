@@ -1,7 +1,7 @@
-# Mathsy/programming things
+# Maths/programming things
 
  - My [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
- - Simulator of the enigma machine in Python: [https://github.com/avisemler/enigma_simulator](https://github.com/avisemler/enigma_simulator)
+ - [Simulator of the enigma machine](https://github.com/avisemler/enigma_simulator), using Python
  - [Some useful results from basic graph theory](/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
  - [Conway's game of life](https://github.com/avisemler/game_of_life), implemented in Python with pygame:
