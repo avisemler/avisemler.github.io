@@ -8,6 +8,12 @@
 
 ![](/files/screenshot.jpg)
 
+# Bioinformatics
+
+ - Really basic phylogenetic tree generator, using neighbour-joining and Levenshtein distance
+
+![](/files/mytree.png)
+
 # Game development
  - Shader for Panda3D game engine:
  
