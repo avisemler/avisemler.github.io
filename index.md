@@ -10,7 +10,7 @@
 
 # Bioinformatics
 
- - Really basic phylogenetic tree generator, using neighbour-joining and Levenshtein distance
+ - Basic [phylogenetic tree generator](https://github.com/avisemler/Phylogeny), using neighbour-joining and (Levenshtein) distance
 
 ![](/files/mytree.png)
 
