@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>backprop.md</title>
+<title>neural_network_notes.md</title>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
 <style>
@@ -394,6 +394,18 @@ code {
 <li><a href="#using-matrices-for-minibatches">Using matrices for minibatches</a></li>
 </ul>
 </li>
+<li><a href="#chapter-3-improved-learning">Chapter 3: Improved learning</a>
+<ul>
+<li><a href="#cross-entropy">Cross-entropy</a>
+<ul>
+<li><a href="#exercise-show-that-c-is-minimized-when-ay">Exercise: show that $C$ is minimized when $a=y$</a></li>
+<li><a href="#exercise-extending-to-networks-with-multiple-neurons-and-layers">Exercise: extending to networks with multiple neurons and layers</a></li>
+<li><a href="#exercise-why-x_j-cant-be-eliminated">Exercise: why $x_j$ can't be eliminated</a></li>
+</ul>
+</li>
+<li><a href="#softmax">Softmax</a></li>
+</ul>
+</li>
 </ul>
 <h1 id="chapter-2-backpropgation">Chapter 2: Backpropgation</h1>
 <h2 id="notation">Notation</h2>
@@ -417,13 +429,13 @@ $$</p>
 <p>$$\frac{\partial C}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L}=\frac{\partial C}{\partial a_j^L}\sigma'(z_j^L)$$</p>
 <p>because the derivative of activation $j$ with respect to any other z-value is zero.</p>
 <h3 id="equation-2-error-in-layer-l-in-terms-of-error-in-layer-l1">Equation 2: Error in layer $l$ in terms of error in layer $l+1$</h3>
-<p>$$\delta_j^l=\Sigma_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l)$$</p>
+<p>$$\delta_j^l=\sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l)$$</p>
 <p>This can also be written in matrix form, but I find this less intuitive.</p>
 <p><strong>Intuition</strong>: the error depends on the error of every neuron
 that it is connected to. But if the weight is low, the contribution of the connected neuron is low and vice versa, so we multiply by the weight. Also, if the derivative of sigma is low, then the value of $z$ is less consequential so multiply by that too.</p>
 <p><strong>Proof</strong>: viewing $C$ as a function of the $z$ values in the next layer and using chain rule:</p>
-<p>$$\delta_j^l=\Sigma_k\frac{\partial C}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^l}=\Sigma_k\delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^l}$$</p>
-<p>Also, $z_k^{l+1}=b_k^{l+1}+\Sigma_iw_{ki}^l\sigma(z_{i}^l)$. Differentiate this, and substitute to get the result.</p>
+<p>$$\delta_j^l=\sum_k\frac{\partial C}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^l}=\sum_k\delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^l}$$</p>
+<p>Also, $z_k^{l+1}=b_k^{l+1}+\sum_iw_{ki}^l\sigma(z_{i}^l)$. Differentiate this, and substitute to get the result.</p>
 <h3 id="equation-3-derivative-wrt-biases">Equation 3: Derivative WRT biases</h3>
 <p>For a bias $b$ and the corresponding $\delta$:
 $$\frac{\partial C}{\partial b}=\delta$$</p>
@@ -431,7 +443,7 @@ $$\frac{\partial C}{\partial b}=\delta$$</p>
 <p><strong>Proof</strong>:
 Applying the chain rule, the only non-vanishing term is
 $$\frac{\partial C}{\partial b}=\frac{\partial C}{\partial z}\frac{\partial z}{\partial b}=\delta\cdot 1$$</p>
-<p>because $\frac{\partial}{\partial b}(b+\Sigma_iw_i\dots)=1$</p>
+<p>because $\frac{\partial}{\partial b}(b+\sum_iw_i\dots)=1$</p>
 <h3 id="equation-4-derivative-wrt-weights">Equation 4: Derivative WRT weights</h3>
 <p>For a weight $w_{jk}^l$:
 $$\frac{\partial C}{\partial w_{jk}^l}=a_k^{l-1}\delta_j^i$$.</p>
@@ -478,5 +490,24 @@ x_1, &amp; \dots ,&amp; x_m
 <style>
     body{padding:0 10%}
 </style>
+<h1 id="chapter-3-improved-learning">Chapter 3: Improved learning</h1>
+<h2 id="cross-entropy">Cross-entropy</h2>
+<p>The version used here for a layer of sigmoid neurons differs from the usual information theoretic definition of cross-entropy (because the outputs do not represent a probability distribution over all possible classifications, so instead consider each neuron as being a Bernoulli distribution). The problem being solved is that with quadratic cost, there is a $\sigma'$ term in the derivative meaning that learning is slow when an activation is very high or low.</p>
+<p>$$C:=-\frac{1}{n}\sum_x y\log(a)+(1-y)\log(1-a)$$</p>
+<p>with the sum over $x$ to account for each example, and $y$ being the desired output. Using the chain rule and manipulation:</p>
+<p>$$\frac{\partial C}{\partial w_j}=x_j(a-y) \text{  (averaged over training examples)}$$</p>
+<p>which lacks a $\sigma'$ term.</p>
+<h3 id="exercise-show-that-c-is-minimized-when-ay">Exercise: show that $C$ is minimized when $a=y$</h3>
+<p>Consider one training example:</p>
+<p>$$\frac{dC}{da}=-\frac{y}{a}+\frac{1-y}{1-a}$$</p>
+<p>which is clearly 0 when $a=y$. It can be further verified that this stationary point is a minimum by differentiating again.</p>
+<h3 id="exercise-extending-to-networks-with-multiple-neurons-and-layers">Exercise: extending to networks with multiple neurons and layers</h3>
+<p>The crux of the exercise is to show that for a single training example $\delta^L=a^L-y$. Consider components of $\delta^L$:</p>
+<p>$$\delta^L_j=\frac{\partial C}{\partial z^L_j}=\frac{\partial}{\partial z_j^L}-\sum_jy_j\log(a_j^L)+(1-y_j)\log(1-a_j^L)$$</p>
+<h3 id="exercise-why-xj-cant-be-eliminated">Exercise: why $x_j$ can't be eliminated</h3>
+<p>Because the derivative of the cost can't depend on $x_j$ - there are many different values of $x_j$ that would result in the same cost.</p>
+<h2 id="softmax">Softmax</h2>
+<p>Using softmax for the output layer means that the activations form a probability distribution (sum to 1).</p>
+
 </body>
 </html>
