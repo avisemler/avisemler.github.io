@@ -32,7 +32,7 @@ Hi! I'm Avi and I'm currently studying maths and computer science. On this page,
 I've written notes about some topics that I've learnt about:
 
  - My [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
- - [Some useful results from basic graph theory](/files/graphtheory.pdf)
+ - [Some results from basic graph theory](/files/graphtheory.pdf) that are often not explicitly stated but can be useful as the first step in proofs
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
 
 
