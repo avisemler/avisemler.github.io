@@ -403,7 +403,13 @@ code {
 <li><a href="#exercise-why-x_j-cant-be-eliminated">Exercise: why $x_j$ can't be eliminated</a></li>
 </ul>
 </li>
-<li><a href="#softmax">Softmax</a></li>
+<li><a href="#softmax">Softmax</a>
+<ul>
+<li><a href="#exercise-inverting-softmax">Exercise: inverting softmax</a></li>
+<li><a href="#exercise-partial-derivatives-of-log-liklihood-cost-with-softmax">Exercise: Partial derivatives of log-liklihood cost with softmax</a></li>
+</ul>
+</li>
+<li><a href="#overfitting-and-regularization">Overfitting and regularization</a></li>
 </ul>
 </li>
 </ul>
@@ -508,6 +514,21 @@ x_1, &amp; \dots ,&amp; x_m
 <p>Because the derivative of the cost can't depend on $x_j$ - there are many different values of $x_j$ that would result in the same cost.</p>
 <h2 id="softmax">Softmax</h2>
 <p>Using softmax for the output layer means that the activations form a probability distribution (sum to 1).</p>
+<p>Enables use of log-liklihood cost function without slowdown:</p>
+<p>$$C=-\log a_c^l$$</p>
+<p>where $c$ is the index of the output neuron that we desire to be fully activated (using one-hot encoding).</p>
+<h3 id="exercise-inverting-softmax">Exercise: inverting softmax</h3>
+<p>$$\log(a_j)=z_j-\log\left(\sum_i e^{z_i}\right)$$</p>
+<p>as required.</p>
+<h3 id="exercise-partial-derivatives-of-log-liklihood-cost-with-softmax">Exercise: Partial derivatives of log-liklihood cost with softmax</h3>
+<p>It suffices to find an expression for $\delta_j^L$ and then the results follow. The key difference now is that activations depend on all other $z$-values (so $\delta$ doesn't vanish when $j \neq c$):</p>
+<p>$$\delta^L_j=\sum_i \frac{\partial a_i^L}{\partial z_j^L}\frac{\partial C}{\partial a_i^L} $$</p>
+<p>The non-vanishing term is $\frac{\partial C}{\partial a_c^L}\frac{a_c^L}{z_J^L}=\frac{-1}{a_c^L}\frac{a_c^L}{z_J^L}=$. Then evaluate the second derivative.</p>
+<h2 id="overfitting-and-regularization">Overfitting and regularization</h2>
+<p>The cost function can be reduced in two ways - memorizing specifics of the training data, or generalizing (correctly or incorrectly). We want to tweak the search and space such that more of the second kind occurs.</p>
+<p>One way to do this is to stop training early, once the performance on the validation data is no longer improving. Scaling up the amount of data used can also make it harder to improve the cost via overfitting.</p>
+<p>Weight decay (or L2 regularisation) is another approach to make it more likely that the network will generalise: it adds on a $\frac{\lambda}{2n}\sum_ww^2$ term to the cost. This encourages the network to have fewer high weights and hence to learn lower complexity functions which are more likely to be general explanations as opposed to memorisations of specifics: it can't &quot;afford&quot; to overreact to single datapoints.</p>
+<p>L1 regularisation adds on the $\ell_1$ norm of the weights to the cost - which results in a few very high activation weights, as the reduction is constant.</p>
 
 </body>
 </html>
