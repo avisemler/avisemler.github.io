@@ -1,6 +1,6 @@
-# About
+# Avi Semler
 
-Hi! I'm Avi and I'm currently studying maths and computer science. On this page, you can see some of the things I've done.
+Hi! I'm currently a maths and computer science student. My in
 
 # Projects
 
@@ -25,14 +25,12 @@ Hi! I'm Avi and I'm currently studying maths and computer science. On this page,
 
 - Game
 
-![](https://raw.githubusercontent.com/typewriter1/FlyingGame/master/screenshot1.png)
+# Writing
 
-# Notes
+I've written notes things I've learnt:
 
-I've written notes about some topics that I've learnt about:
-
- - My [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
- - [Some results from basic graph theory](/files/graphtheory.pdf) that are often not explicitly stated but can be useful as the first step in proofs
+ - [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+ - [Notes on graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
 
 
