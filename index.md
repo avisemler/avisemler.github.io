@@ -24,13 +24,12 @@ machine learning, AI safety, and linguistics.
  
  ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
 
-- Game
 
 # Writing
 
 I've written notes things I've learnt:
 
- - [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+ - [Solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
  - [Notes on graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
 
