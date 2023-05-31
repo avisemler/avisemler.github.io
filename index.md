@@ -29,8 +29,8 @@ machine learning, AI safety, and linguistics.
 
 I've written notes things I've learnt:
 
- - [Solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
- - [Notes on graph algorithms](/files/graphtheory.pdf)
+ - [Exercise solutions and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+ - [Graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
 
 
