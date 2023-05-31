@@ -28,7 +28,7 @@ machine learning, AI safety, and linguistics.
 
 # Writing
 
-I've written notes things I've learnt:
+I've written notes about some things I've learnt:
 
  - [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
  - [Notes on graph algorithms](/files/graphtheory.pdf)
