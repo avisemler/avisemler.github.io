@@ -1,5 +1,7 @@
+---
 layout: home
 title: "Avi Semler"
+---
 
 Hi! I'm currently a maths and computer science student. My interests include
 machine learning, AI safety, and linguistics.
