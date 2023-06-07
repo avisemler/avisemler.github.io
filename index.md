@@ -1,6 +1,6 @@
 ---
 layout: home
-title: "Avi Semler"
+title: "About"
 ---
 
 Hi! I'm currently a maths and computer science student. My interests include
