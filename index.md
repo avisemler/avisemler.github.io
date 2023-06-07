@@ -13,7 +13,7 @@ machine learning, AI safety, and linguistics.
 
 ![](/files/screenshot.jpg)
 
-## Bioinformatics
+### Bioinformatics
 
  - Basic [phylogenetic tree generator](https://github.com/avisemler/Phylogeny), using neighbour-joining and (Levenshtein) distance
 
@@ -22,17 +22,17 @@ machine learning, AI safety, and linguistics.
  - [https://rosalind.info/users/avisemler/](https://rosalind.info/users/avisemler/)
 
 
-## Game development
+### Game development
  - Shader for Panda3D game engine:
  
  ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
 
-# Writing
+## Writing
 
-I've written notes about some things I've learnt:
+Notes about things I've learnt:
 
  - [solutions to exercises and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
  - [Notes on graph algorithms](/files/graphtheory.pdf)
- - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
+ - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf)
 
 
