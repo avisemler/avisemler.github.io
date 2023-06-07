@@ -6,7 +6,7 @@ title: "About"
 Hi! I'm currently a maths and computer science student. My interests include
 machine learning, AI safety, and linguistics.
 
-# Projects
+## Projects
 
  - [Simulator of the enigma machine](https://github.com/avisemler/enigma_simulator), using Python
  - [Conway's game of life](https://github.com/avisemler/game_of_life), implemented in Python with pygame:
@@ -26,8 +26,6 @@ machine learning, AI safety, and linguistics.
  - Shader for Panda3D game engine:
  
  ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
-
-- Game
 
 # Writing
 
