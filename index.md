@@ -8,6 +8,15 @@ title: "Home"
 Hi! I'm currently a maths and computer science student. My interests include maths, statistics,
 deep learning (safety), programming, and linguistics.
 
+# Writing
+
+ - [Exercise solutions and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+ - [Graph algorithms](/files/graphtheory.pdf)
+ - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
+ - [An article about part-of-speech detection using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
+ - [Blog post]
+
+
 ## Projects
 
  - [Simulator of the enigma machine](https://github.com/avisemler/enigma_simulator), using Python
@@ -30,9 +39,3 @@ deep learning (safety), programming, and linguistics.
  ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
 
 
-# Writing
-
- - [Exercise solutions and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
- - [Graph algorithms](/files/graphtheory.pdf)
- - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
- - [An article about part-of-speech detection using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
