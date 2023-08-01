@@ -15,7 +15,7 @@ deep learning (safety), programming, and linguistics.
 
 ![](/files/screenshot.jpg)
 
-### Bioinformatics
+### Computational biology
 
  - Basic [phylogenetic tree generator](https://github.com/avisemler/Phylogeny), using neighbour-joining and (Levenshtein) distance
 
