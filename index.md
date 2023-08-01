@@ -1,16 +1,19 @@
-# Avi Semler
+---
+layout: home
+title: "About"
+---
 
 Hi! I'm currently a maths and computer science student. My interests include
 machine learning, AI safety, and linguistics.
 
-# Projects
+## Projects
 
  - [Simulator of the enigma machine](https://github.com/avisemler/enigma_simulator), using Python
  - [Conway's game of life](https://github.com/avisemler/game_of_life), implemented in Python with pygame:
 
 ![](/files/screenshot.jpg)
 
-## Bioinformatics
+### Bioinformatics
 
  - Basic [phylogenetic tree generator](https://github.com/avisemler/Phylogeny), using neighbour-joining and (Levenshtein) distance
 
@@ -19,7 +22,7 @@ machine learning, AI safety, and linguistics.
  - [https://rosalind.info/users/avisemler/](https://rosalind.info/users/avisemler/)
 
 
-## Game development
+### Game development
  - Shader for Panda3D game engine:
  
  ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
