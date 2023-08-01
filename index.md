@@ -27,10 +27,7 @@ machine learning, AI safety, and linguistics.
 
 # Writing
 
-I've written notes things I've learnt:
-
  - [Exercise solutions and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
  - [Graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
-
-
+ - [An article about language modelling using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
