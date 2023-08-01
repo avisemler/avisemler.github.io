@@ -1,10 +1,12 @@
 ---
 layout: home
-title: "About"
+title: "Home"
 ---
 
-Hi! I'm currently a maths and computer science student. My interests include
-machine learning, AI safety, and linguistics.
+## About me
+
+Hi! I'm currently a maths and computer science student. My interests include maths, statistics,
+deep learning (safety), programming, and linguistics.
 
 ## Projects
 
@@ -33,4 +35,4 @@ machine learning, AI safety, and linguistics.
  - [Exercise solutions and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
  - [Graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
- - [An article about language modelling using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
+ - [An article about part-of-speech detection using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
