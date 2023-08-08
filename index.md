@@ -5,7 +5,7 @@ title: "Home"
 
 ## About me
 
-Hi! I'm currently a maths and computer science student. My interests include maths, statistics,
+Hi! I'm currently a maths and computer science student, with interests including maths, statistics,
 deep learning (safety), programming, and linguistics.
 
 # Writing
