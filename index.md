@@ -5,16 +5,15 @@ title: "Home"
 
 ## About me
 
-Hi! I'm currently a maths and computer science student, with interests including maths, statistics,
+Hi! I'm a maths and computer science student with interests including maths, statistics,
 deep learning (safety), programming, and linguistics.
 
-# Writing
+## Writing
 
- - [Exercise solutions and notes](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
- - [Graph algorithms](/files/graphtheory.pdf)
+ - [Notes and exercise solutions](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+ - [Notes on graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
  - [An article about part-of-speech detection using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
- - [Blog post]
 
 
 ## Projects
