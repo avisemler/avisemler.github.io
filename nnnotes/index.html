@@ -370,11 +370,12 @@ code {
     MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
 </script>
 <h1 id="exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</h1>
-<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's very notation-heavy because I felt that the book contains sufficient explatation but shows fewer symbolic derivations.</p>
+<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's quite notation-heavy because I felt that the book contains sufficient explanation but shows fewer symbolic derivations, so as an exercise I more explicitly wrote out the formal proofs.</p>
 <ul>
 <li><a href="#exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</a></li>
 <li><a href="#chapter-2-backpropgation">Chapter 2: Backpropgation</a>
 <ul>
+<li><a href="#overview">Overview</a></li>
 <li><a href="#notation">Notation</a></li>
 <li><a href="#proof-of-equations">Proof of equations</a>
 <ul>
@@ -410,30 +411,43 @@ code {
 </ul>
 </li>
 <li><a href="#overfitting-and-regularization">Overfitting and regularization</a></li>
+<li><a href="#weight-initialisation">Weight initialisation</a>
+<ul>
+<li><a href="#exercise-standard-deviation-of-activation">Exercise: standard deviation of activation</a></li>
+<li><a href="#problem-connecting-regularization-and-the-improved-method-of-weight-initialization">Problem: Connecting regularization and the improved method of weight initialization</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <h1 id="chapter-2-backpropgation">Chapter 2: Backpropgation</h1>
+<h2 id="overview">Overview</h2>
+<p>We compute gradients of the loss function with respect to each parameter by &quot;pulling gradients
+backwards&quot; through the computational graph.</p>
 <h2 id="notation">Notation</h2>
 <p>There are $L$ layers.</p>
-<p>$w_{jk}^l$ is the weight for connection between $k^{th}$ in layer $l-1$ to $j^{th}$ in layer $l$. Matrix form: $(w^l) _ {jk}:=w_{jk}^l$.</p>
+<p>$w_{jk}^l$ is the weight for connection from the $k^{th}$ neuron in layer $l-1$, to the $j^{th}$ neuron in layer $l$. We can store all these values in a matrix per layer: $(w^l) _ {jk}:=w_{jk}^l$. It might seem more intuitive to write instead store the transpose of this matrix, but
+the expression for computing a forward pass actually uses this un-transposed version - see equation below.</p>
 <p>$b_k^l$ and $a_k^l$ are the weights are activations of neuron $k$ in layer $l$. $b^l$ and $a^l$ are vectors.</p>
 <p>The matrix form of activations becomes</p>
 <p>$$a^l=\sigma(w^la^{l-1}+b^l)$$</p>
-<p>with $\sigma$ applied componentwise.</p>
+<p>with $\sigma$, the activation function, applied componentwise. This is essentially saying that row $j$ of the matrix $w^l$ specifies what linear combination of the activations $a^{l-1}$ is used to calculate the activation $a^l_j$.</p>
+<p>We also define a vector of &quot;raw&quot; activations, without the activation function applied.</p>
 <p>$z^l:=w^la^{l-1}+b^l$.</p>
-<p>$C$ is the cost function, assumed to be some nice combination of cost functions for each training example. From now on, $C$ is the cost function for an individual input, and is assumed to depend only on the outputs of the network.</p>
-<p>$\delta_l^j:=\frac{\partial C}{\partial z_j^l}$, which can be seen as the error because when it is close to 0 it is close to being a critical point. More like &quot;leverage from changing value of this neuron&quot; - how much this neuron affects the cost.</p>
+<p>$C$ is the cost function, assumed to be some nice combination of cost functions for each training example. From now on, $C$ is the cost function for an individual input, and is assumed to depend only on the outputs of the network. We make this assumption since if we can calculate gradients $C$ for a single input with respect to the parameters then we can easily calculate the gradients over a batch of example inputs by e.g. taking an average (if $C$ for many inputs is an average).</p>
+<p>$\delta_l^j:=\frac{\partial C}{\partial z_j^l}$, which can be seen as the error because when it is close to 0 it is close to being a critical point. More like &quot;leverage from changing value of this neuron&quot; - how much this neuron affects the cost. Useful intermediate quantity for calculating gradients with respect to weights and biases.</p>
 <h2 id="proof-of-equations">Proof of equations</h2>
 <h3 id="equation-1-error-in-output-layer">Equation 1: error in output layer</h3>
 <p>$$\delta_j^L=\frac{\partial C}{\partial a^L_j}\sigma'(z_j^L)$$</p>
-<p><strong>Intuition</strong>: the error of neuron $j$ in last layer has two components: the sensitivity of cost to small changes in the activation, and the senitivity of the activation to small changes in the value of $z$.</p>
+<p><strong>Intuition</strong>: The chain rule; the error resulting from the raw activation of neuron $j$ in the last layer is the product of the sensitivity of cost to small changes in the activation, and the senitivity of the activation to small changes in the value of $z$.</p>
 <p><strong>Proof</strong>: Using the definitions:</p>
 <p>$$\delta_j^L=\frac{\partial C}{\partial z_j^L}(a_1^L,\dots,a_n^L)=\frac{\partial C}{\partial z_j^L}(\sigma(z_1^L),\dots,\sigma(z_n^L))
 $$</p>
-<p>The only non-vanishing term in the sum that results when applying the chain rule is:</p>
+<p>This is a derivative of a composition of functions, so apply the chain rule to get:</p>
+<p>$$=\sum_{i=1}^n\frac{\partial C}{\partial a_i^L}\frac{\partial a_i^L}{\partial z_j^L}$$
+The only non-vanishing term in the sum above is:</p>
 <p>$$\frac{\partial C}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L}=\frac{\partial C}{\partial a_j^L}\sigma'(z_j^L)$$</p>
-<p>because the derivative of activation $j$ with respect to any other z-value is zero.</p>
+<p>because the derivative of an any activation other than $a_j^L$ with respect to z-value $z_j^L$ is zero.</p>
 <h3 id="equation-2-error-in-layer-l-in-terms-of-error-in-layer-l1">Equation 2: Error in layer $l$ in terms of error in layer $l+1$</h3>
 <p>$$\delta_j^l=\sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l)$$</p>
 <p>This can also be written in matrix form, but I find this less intuitive.</p>
@@ -529,6 +543,15 @@ x_1, &amp; \dots ,&amp; x_m
 <p>One way to do this is to stop training early, once the performance on the validation data is no longer improving. Scaling up the amount of data used can also make it harder to improve the cost via overfitting.</p>
 <p>Weight decay (or L2 regularisation) is another approach to make it more likely that the network will generalise: it adds on a $\frac{\lambda}{2n}\sum_ww^2$ term to the cost. This encourages the network to have fewer high weights and hence to learn lower complexity functions which are more likely to be general explanations as opposed to memorisations of specifics: it can't &quot;afford&quot; to overreact to single datapoints.</p>
 <p>L1 regularisation adds on the $\ell_1$ norm of the weights to the cost - which results in a few very high activation weights, as the reduction is constant.</p>
+<p>Dropout randomly excludes a subset of the neurons when performing SGD. This can be seen as averaging the outputs of many different networks. There is also an effect of forcing each neuron to learn a robustly useful feature, that does not rely on the presence of other neurons to be useful.</p>
+<p>Another approach is to generate more training examples by applying small perturbations to current ones.</p>
+<h2 id="weight-initialisation">Weight initialisation</h2>
+<p>If we use a normal distribution with constant variance, then in expectation the magnitudes  of activations will be high - meaning that learning slowdown occurs with sigmoid activation. A solution is to divide the variance by the size of the layer to reduce expected activation magnitudes.</p>
+<h3 id="exercise-standard-deviation-of-activation">Exercise: standard deviation of activation</h3>
+<p>$$\text{Var}(b+\sum_{i=1}^{500}w_i)=\text{Var}(b)+\text{Var}(\sum_{i=1}^{500}w_i)=1+500\frac{1}{1000}=\frac{3}{2}$$</p>
+<p>Square root to get desired standard deviation.</p>
+<h3 id="problem-connecting-regularization-and-the-improved-method-of-weight-initialization">Problem: Connecting regularization and the improved method of weight initialization</h3>
+<p>If the old approach to weight initialisation is used, then in early epochs the weights will be high and the fastest way to decrease the cost locally will be to reduce the magnitude of the weights instead of achieving better classification accuracy.</p>
 
 </body>
 </html>
