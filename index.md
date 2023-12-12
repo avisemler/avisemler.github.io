@@ -17,17 +17,18 @@ deep learning (safety), programming, and linguistics.
 
 
 ## Projects
-
+ - [Agent-based simulation of congested systems](https://github.com/avisemler/agent_simulation) such as demand for traffic, completed in summer 2023 as part of the University of Warwick's undergraduate research support scheme:
+<img src="/agent_plot.png" width=30%>
  - [Simulator of the enigma machine](https://github.com/avisemler/enigma_simulator), using Python
  - [Conway's game of life](https://github.com/avisemler/game_of_life), implemented in Python with pygame:
 
-![](/files/screenshot.jpg)
+<img src="/files/screenshot.jpg" width=30%>
 
 ### Computational biology
 
  - Basic [phylogenetic tree generator](https://github.com/avisemler/Phylogeny), using neighbour-joining and (Levenshtein) distance
 
-![](/files/mytree.png)
+<img src="/files/mytree.png" width=40%>
 
  - [https://rosalind.info/users/avisemler/](https://rosalind.info/users/avisemler/)
 
@@ -35,6 +36,6 @@ deep learning (safety), programming, and linguistics.
 ### Game development
  - Shader for Panda3D game engine:
  
- ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg)
+ <img src="https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg" width=50%>
 
 
