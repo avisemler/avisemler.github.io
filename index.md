@@ -21,14 +21,13 @@ deep learning (safety), programming, and linguistics.
 ![Agent Plot](/agent_plot.png){: width="30%"}
  - [Simulator of the enigma machine](https://github.com/avisemler/enigma_simulator), using Python
  - [Conway's game of life](https://github.com/avisemler/game_of_life), implemented in Python with pygame:
-
 ![Game of Life Screenshot](/files/screenshot.jpg){: width="30%"}
 
 ### Computational biology
 
  - Basic [phylogenetic tree generator](https://github.com/avisemler/Phylogeny), using neighbour-joining and (Levenshtein) distance
 
-<img src="/files/mytree.png" width=40%>
+![Tree](/files/mytree.png){: width="40%"}
 
  - [https://rosalind.info/users/avisemler/](https://rosalind.info/users/avisemler/)
 
