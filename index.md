@@ -36,6 +36,6 @@ deep learning (safety), programming, and linguistics.
 ### Game development
  - Shader for Panda3D game engine:
  
- ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg"){: width="50%"}
+ ![](https://raw.githubusercontent.com/typewriter1/physically-based-panda/master/car.jpg){: width="50%"}
 
 
