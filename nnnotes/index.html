@@ -370,9 +370,16 @@ code {
     MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
 </script>
 <h1 id="exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</h1>
-<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's quite notation-heavy because I felt that the book contains sufficient explanation but shows fewer symbolic derivations, so as an exercise I more explicitly wrote out the formal proofs.</p>
+<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's quite notation-heavy because I felt that the book contains sufficient explanation but shows fewer symbolic derivations, so as an exercise I wrote out some derivations more explicitly.</p>
 <ul>
 <li><a href="#exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</a></li>
+<li><a href="#chatper-1-neural-networks">Chatper 1: Neural networks</a>
+<ul>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#why-neural-networks">Why neural networks?</a></li>
+<li><a href="#what-are-neural-networks">What are neural networks?</a></li>
+</ul>
+</li>
 <li><a href="#chapter-2-backpropgation">Chapter 2: Backpropgation</a>
 <ul>
 <li><a href="#overview">Overview</a></li>
@@ -420,10 +427,51 @@ code {
 </ul>
 </li>
 </ul>
+<h1 id="chatper-1-neural-networks">Chatper 1: Neural networks</h1>
+<h2 id="motivation">Motivation</h2>
+<p>There are tasks that are extremely difficult to solve using human-designed algorithms. A classic example is handwriting recognition:
+most people can easily interpret images of handwritten digits, with the processing done on an <a href="https://en.wikipedia.org/wiki/Dual_process_theory">intuitive</a>
+level. But this doesn't enable us to write down a short computer program to accurately decide what digit a given pixel sequence represents.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/MnistExamplesModified.png" alt="MNIST"></p>
+<p>Machine learning makes it tractable to automate digit classification (along with many other hard-to-implement tasks!). Instead of
+specifying an algorithm by hand, we <em>infer</em> an algorithm from a dataset of examples and a description of what the correct behaviour on the examples is.</p>
+<h2 id="why-neural-networks">Why neural networks?</h2>
+<p>Let's start with a naive approach to learning an algorithm to classify digits:</p>
+<ul>
+<li>Start with a randomly initialised program in your favourite language</li>
+<li>Design a metric to measure how well your initialised program classifies images of digits</li>
+<li>Sample many small tweaks that could be made to the initial program, and apply the one that results in the greatest increase in classification performance</li>
+<li>Repeat many times until you have reached a program that classifies digits well</li>
+</ul>
+<p>There are several reasons why this approach is not effective, although it is a useful as an analogy to the successful approach of using (deep) neural networks
+for classification. The reasons that the naive approach fails:</p>
+<ol>
+<li>It's hard to sample a random program as the initialisation! Most strings are not valid programs</li>
+<li>Most tweaks won't significantly affect classification performance - most will simply cause syntax errors</li>
+<li>Even if a tweak  locally improves performance, there is no guarantee that this will point towards a good classifier globally</li>
+</ol>
+<p>Neural networks address all three issues.</p>
+<h2 id="what-are-neural-networks">What are neural networks?</h2>
+<p>Neural networks can be thought of as being analogous to computer programs, transforming an input into an output. We fix an architecture (a parametrised set of
+neural network functions) and optimise over the parameters to find a neural network that performs well.</p>
+<p>The precise processing that is done can be described as follows:</p>
+<p>There is an input vector $v\in\mathbb{R}^{n_0}$. There are $L$ <em>layers</em> (typically consisting of an affine map and then a non-linear but differentiable map $\sigma$) that are applied iteratively to transform the input into the output:</p>
+<p>$$a_{l}=\sigma(w^la_{l-1}+b^l)$$</p>
+<p>for $l=1,\dots,L$ and $a_0=v$. Here, the parameters that specify the map are the weight matrices $w^l$ and bias vectors $b^l$.</p>
+<p>Now we can see how neural networks overcome the failures of the naive approach to learning a classification algorithm:</p>
+<ol>
+<li>Any parameter choice corresponds to a valid map, so it is easy to initialise randomly</li>
+<li>It is easy to select tweaks that minimise some loss function, because neural networks are differentiable with respect to the parameter! So <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> can be applied</li>
+<li>There are <a href="https://arxiv.org/abs/1906.05890">theoretical results</a> that suggest that gradient descent will not get stuck in bad local minima of the loss landscape under certain assumptions; it is also empirically observed that gradient descent can learn functions that <em>generalise</em> well. (Generalisation means performing well on inputs outside of the training examples)</li>
+</ol>
+<p>However, compared to algorithms written in high-level languages, we sacrifice the understanding of exactly how the classification is being done.
+Neural networks compute largely by multiplication by matrices of somewhat mysterious numbers to get not-immediately-interpretable intermediate
+representations of the data.</p>
 <h1 id="chapter-2-backpropgation">Chapter 2: Backpropgation</h1>
 <h2 id="overview">Overview</h2>
-<p>We compute gradients of the loss function with respect to each parameter by &quot;pulling gradients
-backwards&quot; through the computational graph.</p>
+<p>To perform gradient descent, we must be able to compute gradients with respect to the parameters.
+Backpropogation is a performant algorithm for this, computing derivatives of the loss function with respect to each parameter by &quot;pulling gradients
+backwards&quot; through each step of the network using the chain rule.</p>
 <h2 id="notation">Notation</h2>
 <p>There are $L$ layers.</p>
 <p>$w_{jk}^l$ is the weight for connection from the $k^{th}$ neuron in layer $l-1$, to the $j^{th}$ neuron in layer $l$. We can store all these values in a matrix per layer: $(w^l) _ {jk}:=w_{jk}^l$. It might seem more intuitive to write instead store the transpose of this matrix, but
@@ -539,7 +587,7 @@ x_1, &amp; \dots ,&amp; x_m
 <p>$$\delta^L_j=\sum_i \frac{\partial a_i^L}{\partial z_j^L}\frac{\partial C}{\partial a_i^L} $$</p>
 <p>The non-vanishing term is $\frac{\partial C}{\partial a_c^L}\frac{a_c^L}{z_J^L}=\frac{-1}{a_c^L}\frac{a_c^L}{z_J^L}=$. Then evaluate the second derivative.</p>
 <h2 id="overfitting-and-regularization">Overfitting and regularization</h2>
-<p>The cost function can be reduced in two ways - memorizing specifics of the training data, or generalizing (correctly or incorrectly). We want to tweak the search and space such that more of the second kind occurs.</p>
+<p>The cost function can be reduced in two ways - memorizing specifics of the training data, or generalising (correctly or incorrectly). We want to tweak the search and space such that more of the second kind occurs.</p>
 <p>One way to do this is to stop training early, once the performance on the validation data is no longer improving. Scaling up the amount of data used can also make it harder to improve the cost via overfitting.</p>
 <p>Weight decay (or L2 regularisation) is another approach to make it more likely that the network will generalise: it adds on a $\frac{\lambda}{2n}\sum_ww^2$ term to the cost. This encourages the network to have fewer high weights and hence to learn lower complexity functions which are more likely to be general explanations as opposed to memorisations of specifics: it can't &quot;afford&quot; to overreact to single datapoints.</p>
 <p>L1 regularisation adds on the $\ell_1$ norm of the weights to the cost - which results in a few very high activation weights, as the reduction is constant.</p>
