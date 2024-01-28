@@ -10,7 +10,7 @@ deep learning (safety), programming, and linguistics.
 
 ## Writing
 
- - [Notes and exercise solutions](/nnnotes/) for the book [http://neuralnetworksanddeeplearning.com/](http://neuralnetworksanddeeplearning.com/)
+ - [Notes on deep learning](/nnnotes/)
  - [Notes on graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
  - [An article about part-of-speech detection using Markov chains](https://issuu.com/poincaremagazine/docs/issue_1) for Poincare magazine
