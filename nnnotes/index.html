@@ -1,605 +1,393 @@
-<!DOCTYPE html>
-<html>
-<head>
-<title>neural_network_notes.md</title>
-<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
- *  Copyright (c) Microsoft Corporation. All rights reserved.
- *  Licensed under the MIT License. See License.txt in the project root for license information.
- *--------------------------------------------------------------------------------------------*/
-
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
-
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
- * Markdown PDF CSS
- */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
--------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
-
-<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
-</head>
-<body>
-  <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
-          ? 'dark'
-          : 'default'
-    });
-  </script>
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config">
     MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
 </script>
-<h1 id="exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</h1>
-<p>I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's quite notation-heavy because I felt that the book contains sufficient explanation but shows fewer symbolic derivations, so as an exercise I wrote out some derivations more explicitly.</p>
-<ul>
-<li><a href="#exercise-solutions-and-notes-from-neural-networks-and-deep-learning">Exercise solutions and notes from 'Neural Networks and Deep Learning'</a></li>
-<li><a href="#chatper-1-neural-networks">Chatper 1: Neural networks</a>
-<ul>
-<li><a href="#motivation">Motivation</a></li>
-<li><a href="#why-neural-networks">Why neural networks?</a></li>
-<li><a href="#what-are-neural-networks">What are neural networks?</a></li>
-</ul>
-</li>
-<li><a href="#chapter-2-backpropgation">Chapter 2: Backpropgation</a>
-<ul>
-<li><a href="#overview">Overview</a></li>
-<li><a href="#notation">Notation</a></li>
-<li><a href="#proof-of-equations">Proof of equations</a>
-<ul>
-<li><a href="#equation-1-error-in-output-layer">Equation 1: error in output layer</a></li>
-<li><a href="#equation-2-error-in-layer-l-in-terms-of-error-in-layer-l1">Equation 2: Error in layer $l$ in terms of error in layer $l+1$</a></li>
-<li><a href="#equation-3-derivative-wrt-biases">Equation 3: Derivative WRT biases</a></li>
-<li><a href="#equation-4-derivative-wrt-weights">Equation 4: Derivative WRT weights</a></li>
-</ul>
-</li>
-<li><a href="#exercise-matrix-forms">Exercise: matrix forms</a>
-<ul>
-<li><a href="#equation-1">Equation 1</a></li>
-<li><a href="#equation-2">Equation 2</a></li>
-<li><a href="#third-exercise">Third exercise</a></li>
-</ul>
-</li>
-<li><a href="#using-matrices-for-minibatches">Using matrices for minibatches</a></li>
-</ul>
-</li>
-<li><a href="#chapter-3-improved-learning">Chapter 3: Improved learning</a>
-<ul>
-<li><a href="#cross-entropy">Cross-entropy</a>
-<ul>
-<li><a href="#exercise-show-that-c-is-minimized-when-ay">Exercise: show that $C$ is minimized when $a=y$</a></li>
-<li><a href="#exercise-extending-to-networks-with-multiple-neurons-and-layers">Exercise: extending to networks with multiple neurons and layers</a></li>
-<li><a href="#exercise-why-x_j-cant-be-eliminated">Exercise: why $x_j$ can't be eliminated</a></li>
-</ul>
-</li>
-<li><a href="#softmax">Softmax</a>
-<ul>
-<li><a href="#exercise-inverting-softmax">Exercise: inverting softmax</a></li>
-<li><a href="#exercise-partial-derivatives-of-log-liklihood-cost-with-softmax">Exercise: Partial derivatives of log-liklihood cost with softmax</a></li>
-</ul>
-</li>
-<li><a href="#overfitting-and-regularization">Overfitting and regularization</a></li>
-<li><a href="#weight-initialisation">Weight initialisation</a>
-<ul>
-<li><a href="#exercise-standard-deviation-of-activation">Exercise: standard deviation of activation</a></li>
-<li><a href="#problem-connecting-regularization-and-the-improved-method-of-weight-initialization">Problem: Connecting regularization and the improved method of weight initialization</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1 id="chatper-1-neural-networks">Chatper 1: Neural networks</h1>
-<h2 id="motivation">Motivation</h2>
-<p>There are tasks that are extremely difficult to solve using human-designed algorithms. A classic example is handwriting recognition:
-most people can easily interpret images of handwritten digits, with the processing done on an <a href="https://en.wikipedia.org/wiki/Dual_process_theory">intuitive</a>
-level. But this doesn't enable us to write down a short computer program to accurately decide what digit a given pixel sequence represents.</p>
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/f/f7/MnistExamplesModified.png" alt="MNIST"></p>
-<p>Machine learning makes it tractable to automate digit classification (along with many other hard-to-implement tasks!). Instead of
-specifying an algorithm by hand, we <em>infer</em> an algorithm from a dataset of examples and a description of what the correct behaviour on the examples is.</p>
-<h2 id="why-neural-networks">Why neural networks?</h2>
-<p>Let's start with a naive approach to learning an algorithm to classify digits:</p>
-<ul>
-<li>Start with a randomly initialised program in your favourite language</li>
-<li>Design a metric to measure how well your initialised program classifies images of digits</li>
-<li>Sample many small tweaks that could be made to the initial program, and apply the one that results in the greatest increase in classification performance</li>
-<li>Repeat many times until you have reached a program that classifies digits well</li>
-</ul>
-<p>There are several reasons why this approach is not effective, although it is a useful as an analogy to the successful approach of using (deep) neural networks
-for classification. The reasons that the naive approach fails:</p>
-<ol>
-<li>It's hard to sample a random program as the initialisation! Most strings are not valid programs</li>
-<li>Most tweaks won't significantly affect classification performance - most will simply cause syntax errors</li>
-<li>Even if a tweak  locally improves performance, there is no guarantee that this will point towards a good classifier globally</li>
-</ol>
-<p>Neural networks address all three issues.</p>
-<h2 id="what-are-neural-networks">What are neural networks?</h2>
-<p>Neural networks can be thought of as being analogous to computer programs, transforming an input into an output. We fix an architecture (a parametrised set of
-neural network functions) and optimise over the parameters to find a neural network that performs well.</p>
-<p>The precise processing that is done can be described as follows:</p>
-<p>There is an input vector $v\in\mathbb{R}^{n_0}$. There are $L$ <em>layers</em> (typically consisting of an affine map and then a non-linear but differentiable map $\sigma$) that are applied iteratively to transform the input into the output:</p>
-<p>$$a_{l}=\sigma(w^la_{l-1}+b^l)$$</p>
-<p>for $l=1,\dots,L$ and $a_0=v$. Here, the parameters that specify the map are the weight matrices $w^l$ and bias vectors $b^l$.</p>
-<p>Now we can see how neural networks overcome the failures of the naive approach to learning a classification algorithm:</p>
-<ol>
-<li>Any parameter choice corresponds to a valid map, so it is easy to initialise randomly</li>
-<li>It is easy to select tweaks that minimise some loss function, because neural networks are differentiable with respect to the parameter! So <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> can be applied</li>
-<li>There are <a href="https://arxiv.org/abs/1906.05890">theoretical results</a> that suggest that gradient descent will not get stuck in bad local minima of the loss landscape under certain assumptions; it is also empirically observed that gradient descent can learn functions that <em>generalise</em> well. (Generalisation means performing well on inputs outside of the training examples)</li>
-</ol>
-<p>However, compared to algorithms written in high-level languages, we sacrifice the understanding of exactly how the classification is being done.
-Neural networks compute largely by multiplication by matrices of somewhat mysterious numbers to get not-immediately-interpretable intermediate
-representations of the data.</p>
-<h1 id="chapter-2-backpropgation">Chapter 2: Backpropgation</h1>
-<h2 id="overview">Overview</h2>
-<p>To perform gradient descent, we must be able to compute gradients with respect to the parameters.
-Backpropogation is a performant algorithm for this, computing derivatives of the loss function with respect to each parameter by &quot;pulling gradients
-backwards&quot; through each step of the network using the chain rule.</p>
-<h2 id="notation">Notation</h2>
-<p>There are $L$ layers.</p>
-<p>$w_{jk}^l$ is the weight for connection from the $k^{th}$ neuron in layer $l-1$, to the $j^{th}$ neuron in layer $l$. We can store all these values in a matrix per layer: $(w^l) _ {jk}:=w_{jk}^l$. It might seem more intuitive to write instead store the transpose of this matrix, but
-the expression for computing a forward pass actually uses this un-transposed version - see equation below.</p>
-<p>$b_k^l$ and $a_k^l$ are the weights are activations of neuron $k$ in layer $l$. $b^l$ and $a^l$ are vectors.</p>
-<p>The matrix form of activations becomes</p>
-<p>$$a^l=\sigma(w^la^{l-1}+b^l)$$</p>
-<p>with $\sigma$, the activation function, applied componentwise. This is essentially saying that row $j$ of the matrix $w^l$ specifies what linear combination of the activations $a^{l-1}$ is used to calculate the activation $a^l_j$.</p>
-<p>We also define a vector of &quot;raw&quot; activations, without the activation function applied.</p>
-<p>$z^l:=w^la^{l-1}+b^l$.</p>
-<p>$C$ is the cost function, assumed to be some nice combination of cost functions for each training example. From now on, $C$ is the cost function for an individual input, and is assumed to depend only on the outputs of the network. We make this assumption since if we can calculate gradients $C$ for a single input with respect to the parameters then we can easily calculate the gradients over a batch of example inputs by e.g. taking an average (if $C$ for many inputs is an average).</p>
-<p>$\delta_l^j:=\frac{\partial C}{\partial z_j^l}$, which can be seen as the error because when it is close to 0 it is close to being a critical point. More like &quot;leverage from changing value of this neuron&quot; - how much this neuron affects the cost. Useful intermediate quantity for calculating gradients with respect to weights and biases.</p>
-<h2 id="proof-of-equations">Proof of equations</h2>
-<h3 id="equation-1-error-in-output-layer">Equation 1: error in output layer</h3>
-<p>$$\delta_j^L=\frac{\partial C}{\partial a^L_j}\sigma'(z_j^L)$$</p>
-<p><strong>Intuition</strong>: The chain rule; the error resulting from the raw activation of neuron $j$ in the last layer is the product of the sensitivity of cost to small changes in the activation, and the senitivity of the activation to small changes in the value of $z$.</p>
-<p><strong>Proof</strong>: Using the definitions:</p>
-<p>$$\delta_j^L=\frac{\partial C}{\partial z_j^L}(a_1^L,\dots,a_n^L)=\frac{\partial C}{\partial z_j^L}(\sigma(z_1^L),\dots,\sigma(z_n^L))
-$$</p>
-<p>This is a derivative of a composition of functions, so apply the chain rule to get:</p>
-<p>$$=\sum_{i=1}^n\frac{\partial C}{\partial a_i^L}\frac{\partial a_i^L}{\partial z_j^L}$$
-The only non-vanishing term in the sum above is:</p>
-<p>$$\frac{\partial C}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L}=\frac{\partial C}{\partial a_j^L}\sigma'(z_j^L)$$</p>
-<p>because the derivative of an any activation other than $a_j^L$ with respect to z-value $z_j^L$ is zero.</p>
-<h3 id="equation-2-error-in-layer-l-in-terms-of-error-in-layer-l1">Equation 2: Error in layer $l$ in terms of error in layer $l+1$</h3>
-<p>$$\delta_j^l=\sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l)$$</p>
-<p>This can also be written in matrix form, but I find this less intuitive.</p>
-<p><strong>Intuition</strong>: the error depends on the error of every neuron
-that it is connected to. But if the weight is low, the contribution of the connected neuron is low and vice versa, so we multiply by the weight. Also, if the derivative of sigma is low, then the value of $z$ is less consequential so multiply by that too.</p>
-<p><strong>Proof</strong>: viewing $C$ as a function of the $z$ values in the next layer and using chain rule:</p>
-<p>$$\delta_j^l=\sum_k\frac{\partial C}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^l}=\sum_k\delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^l}$$</p>
-<p>Also, $z_k^{l+1}=b_k^{l+1}+\sum_iw_{ki}^l\sigma(z_{i}^l)$. Differentiate this, and substitute to get the result.</p>
-<h3 id="equation-3-derivative-wrt-biases">Equation 3: Derivative WRT biases</h3>
-<p>For a bias $b$ and the corresponding $\delta$:
-$$\frac{\partial C}{\partial b}=\delta$$</p>
-<p><strong>Intuition</strong>: changing the bias by a small amount has the same effect as just directly changing the $z$-value directly.</p>
-<p><strong>Proof</strong>:
+
+
+# Notes on Deep Learning
+
+These notes are an accumulation from my time spent studying various topics in deep learning.
+
+The first three chapters are based on the book 'Neural Networks and Deep Learning' by Michael Nielsen. I've summarized some of the book in a way that was helpful for me, and also included my solutions to the exercises. It's quite notation-heavy because I felt that the book contains sufficient explanation but shows fewer symbolic derivations, so as an exercise I wrote out some derivations more explicitly.
+
+The later chapters are based on individual topics or papers that I have learnt about.
+
+- [Notes on Deep Learning](#notes-on-deep-learning)
+- [Chatper 1: Neural networks](#chatper-1-neural-networks)
+  - [Motivation](#motivation)
+  - [Why neural networks?](#why-neural-networks)
+  - [What are neural networks?](#what-are-neural-networks)
+- [Chapter 2: Backpropgation](#chapter-2-backpropgation)
+  - [Overview](#overview)
+  - [Notation](#notation)
+  - [Proof of equations](#proof-of-equations)
+    - [Equation 1: error in output layer](#equation-1-error-in-output-layer)
+    - [Equation 2: Error in layer $l$ in terms of error in layer $l+1$](#equation-2-error-in-layer-l-in-terms-of-error-in-layer-l1)
+    - [Equation 3: Derivative WRT biases](#equation-3-derivative-wrt-biases)
+    - [Equation 4: Derivative WRT weights](#equation-4-derivative-wrt-weights)
+  - [Exercise: matrix forms](#exercise-matrix-forms)
+    - [Equation 1](#equation-1)
+    - [Equation 2](#equation-2)
+    - [Third exercise](#third-exercise)
+  - [Using matrices for minibatches](#using-matrices-for-minibatches)
+- [Chapter 3: Improved learning](#chapter-3-improved-learning)
+  - [Cross-entropy](#cross-entropy)
+    - [Exercise: show that $C$ is minimized when $a=y$](#exercise-show-that-c-is-minimized-when-ay)
+    - [Exercise: extending to networks with multiple neurons and layers](#exercise-extending-to-networks-with-multiple-neurons-and-layers)
+    - [Exercise: why $x\_j$ can't be eliminated](#exercise-why-x_j-cant-be-eliminated)
+  - [Softmax](#softmax)
+    - [Exercise: inverting softmax](#exercise-inverting-softmax)
+    - [Exercise: Partial derivatives of log-liklihood cost with softmax](#exercise-partial-derivatives-of-log-liklihood-cost-with-softmax)
+  - [Overfitting and regularization](#overfitting-and-regularization)
+  - [Weight initialisation](#weight-initialisation)
+    - [Exercise: standard deviation of activation](#exercise-standard-deviation-of-activation)
+    - [Problem: Connecting regularization and the improved method of weight initialization](#problem-connecting-regularization-and-the-improved-method-of-weight-initialization)
+- [Chapter 4: Decoder-only transformer architecture](#chapter-4-decoder-only-transformer-architecture)
+  - [Attention](#attention)
+    - [A single attention head](#a-single-attention-head)
+    - [Combining heads](#combining-heads)
+
+# Chatper 1: Neural networks
+
+## Motivation
+
+There are tasks that are extremely difficult to solve using human-designed algorithms. A classic example is handwriting recognition:
+most people can easily interpret images of handwritten digits, with the processing done on an [intuitive](https://en.wikipedia.org/wiki/Dual_process_theory)
+level. But this doesn't enable us to write down a short computer program to accurately decide what digit a given pixel sequence represents.
+
+![MNIST](https://upload.wikimedia.org/wikipedia/commons/f/f7/MnistExamplesModified.png)
+
+Machine learning makes it tractable to automate digit classification (along with many other hard-to-implement tasks!). Instead of
+specifying an algorithm by hand, we *infer* an algorithm from a dataset of examples and a description of what the correct behaviour on the examples is.
+
+## Why neural networks?
+
+Let's start with a naive approach to learning an algorithm to classify digits:
+
+ - Start with a randomly initialised program in your favourite language
+ - Design a metric to measure how well your initialised program classifies images of digits
+ - Sample many small tweaks that could be made to the initial program, and apply the one that results in the greatest increase in classification performance
+ - Repeat many times until you have reached a program that classifies digits well
+
+There are several reasons why this approach is not effective, although it is a useful as an analogy to the successful approach of using (deep) neural networks
+for classification. The reasons that the naive approach fails:
+
+  1. It's hard to sample a random program as the initialisation! Most strings are not valid programs
+  2. Most tweaks won't significantly affect classification performance - most will simply cause syntax errors
+  3. Even if a tweak  locally improves performance, there is no guarantee that this will point towards a good classifier globally
+
+Neural networks address all three issues.
+
+## What are neural networks?
+
+Neural networks can be thought of as being analogous to computer programs, transforming an input into an output. We fix an architecture (a parametrised set of 
+neural network functions) and optimise over the parameters to find a neural network that performs well.
+
+The precise processing that is done can be described as follows:
+
+There is an input vector $v\in\mathbb{R}^{n_0}$. There are $L$ *layers* (typically consisting of an affine map and then a non-linear but differentiable map $\sigma$) that are applied iteratively to transform the input into the output:
+
+$$a_{l}=\sigma(w^la_{l-1}+b^l)$$
+
+
+for $l=1,\dots,L$ and $a_0=v$. Here, the parameters that specify the map are the weight matrices $w^l$ and bias vectors $b^l$.
+
+Now we can see how neural networks overcome the failures of the naive approach to learning a classification algorithm:
+
+ 1. Any parameter choice corresponds to a valid map, so it is easy to initialise randomly
+ 2. It is easy to select tweaks that minimise some loss function, because neural networks are differentiable with respect to the parameter! So [gradient descent](https://en.wikipedia.org/wiki/Gradient_descent) can be applied
+ 3. There are [theoretical results](https://arxiv.org/abs/1906.05890) that suggest that gradient descent will not get stuck in bad local minima of the loss landscape under certain assumptions; it is also empirically observed that gradient descent can learn functions that *generalise* well. (Generalisation means performing well on inputs outside of the training examples)
+
+However, compared to algorithms written in high-level languages, we sacrifice the understanding of exactly how the classification is being done.
+Neural networks compute largely by multiplication by matrices of somewhat mysterious numbers to get not-immediately-interpretable intermediate 
+representations of the data.
+
+# Chapter 2: Backpropgation
+
+## Overview
+
+To perform gradient descent, we must be able to compute gradients with respect to the parameters.
+Backpropogation is a performant algorithm for this, computing derivatives of the loss function with respect to each parameter by "pulling gradients
+backwards" through each step of the network using the chain rule.
+
+## Notation
+
+There are $L$ layers.
+
+$w_{jk}^l$ is the weight for connection from the $k^{th}$ neuron in layer $l-1$, to the $j^{th}$ neuron in layer $l$. We can store all these values in a matrix per layer: $(w^l) _ {jk}:=w_{jk}^l$. It might seem more intuitive to write instead store the transpose of this matrix, but
+the expression for computing a forward pass actually uses this un-transposed version - see equation below.
+
+
+$b_k^l$ and $a_k^l$ are the weights are activations of neuron $k$ in layer $l$. $b^l$ and $a^l$ are vectors.
+
+The matrix form of activations becomes
+
+$$a^l=\sigma(w^la^{l-1}+b^l)$$
+
+with $\sigma$, the activation function, applied componentwise. This is essentially saying that row $j$ of the matrix $w^l$ specifies what linear combination of the activations $a^{l-1}$ is used to calculate the activation $a^l_j$.
+
+We also define a vector of "raw" activations, without the activation function applied.
+
+$z^l:=w^la^{l-1}+b^l$.
+
+$C$ is the cost function, assumed to be some nice combination of cost functions for each training example. From now on, $C$ is the cost function for an individual input, and is assumed to depend only on the outputs of the network. We make this assumption since if we can calculate gradients $C$ for a single input with respect to the parameters then we can easily calculate the gradients over a batch of example inputs by e.g. taking an average (if $C$ for many inputs is an average).
+
+$\delta_l^j:=\frac{\partial C}{\partial z_j^l}$, which can be seen as the error because when it is close to 0 it is close to being a critical point. More like "leverage from changing value of this neuron" - how much this neuron affects the cost. Useful intermediate quantity for calculating gradients with respect to weights and biases.
+
+## Proof of equations
+
+### Equation 1: error in output layer
+
+$$\delta_j^L=\frac{\partial C}{\partial a^L_j}\sigma'(z_j^L)$$
+
+__Intuition__: The chain rule; the error resulting from the raw activation of neuron $j$ in the last layer is the product of the sensitivity of cost to small changes in the activation, and the senitivity of the activation to small changes in the value of $z$.
+
+__Proof__: Using the definitions:
+
+$$\delta_j^L=\frac{\partial C}{\partial z_j^L}(a_1^L,\dots,a_n^L)=\frac{\partial C}{\partial z_j^L}(\sigma(z_1^L),\dots,\sigma(z_n^L))
+$$
+
+This is a derivative of a composition of functions, so apply the chain rule to get:
+
+$$=\sum_{i=1}^n\frac{\partial C}{\partial a_i^L}\frac{\partial a_i^L}{\partial z_j^L}$$
+The only non-vanishing term in the sum above is:
+
+$$\frac{\partial C}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L}=\frac{\partial C}{\partial a_j^L}\sigma'(z_j^L)$$
+
+because the derivative of an any activation other than $a_j^L$ with respect to z-value $z_j^L$ is zero.
+
+### Equation 2: Error in layer $l$ in terms of error in layer $l+1$
+
+$$\delta_j^l=\sum_k\delta_k^{l+1}w_{kj}^{l+1}\sigma'(z_j^l)$$
+
+This can also be written in matrix form, but I find this less intuitive.
+
+__Intuition__: the error depends on the error of every neuron
+that it is connected to. But if the weight is low, the contribution of the connected neuron is low and vice versa, so we multiply by the weight. Also, if the derivative of sigma is low, then the value of $z$ is less consequential so multiply by that too. 
+
+__Proof__: viewing $C$ as a function of the $z$ values in the next layer and using chain rule:
+
+$$\delta_j^l=\sum_k\frac{\partial C}{\partial z_k^{l+1}}\frac{\partial z_k^{l+1}}{\partial z_j^l}=\sum_k\delta_k^{l+1}\frac{\partial z_k^{l+1}}{\partial z_j^l}$$
+
+Also, $z_k^{l+1}=b_k^{l+1}+\sum_iw_{ki}^l\sigma(z_{i}^l)$. Differentiate this, and substitute to get the result.
+
+### Equation 3: Derivative WRT biases
+For a bias $b$ and the corresponding $\delta$:
+$$\frac{\partial C}{\partial b}=\delta$$
+
+__Intuition__: changing the bias by a small amount has the same effect as just directly changing the $z$-value directly.
+
+__Proof__:
 Applying the chain rule, the only non-vanishing term is
-$$\frac{\partial C}{\partial b}=\frac{\partial C}{\partial z}\frac{\partial z}{\partial b}=\delta\cdot 1$$</p>
-<p>because $\frac{\partial}{\partial b}(b+\sum_iw_i\dots)=1$</p>
-<h3 id="equation-4-derivative-wrt-weights">Equation 4: Derivative WRT weights</h3>
-<p>For a weight $w_{jk}^l$:
-$$\frac{\partial C}{\partial w_{jk}^l}=a_k^{l-1}\delta_j^i$$.</p>
-<p><strong>Intuition</strong>: changing a weight effects the cost in proportion with the activation of the neuron that is &quot;feeding into&quot; the edge controlled by that weight.</p>
-<p><strong>Proof</strong>: identical to previous but differentiate with respect to the weight instead of the bias.</p>
-<h2 id="exercise-matrix-forms">Exercise: matrix forms</h2>
-<h3 id="equation-1">Equation 1</h3>
-<p>We view the activation function as $\Sigma:\mathbb{R}^n\rightarrow\mathbb{R}^n$, where $n$ is the size of the $L^{th}$ layer, with $\Sigma(z_1,\dots,z_n):=(\sigma(z_1),\dots,\sigma(z_n))$. Hence, its Jacobian matrix $\Sigma'(z)$ is an
-$n\times n$ matrix in the form</p>
-<p>$$\begin{pmatrix}
-\sigma'(z_1) &amp; 0 &amp; 0 &amp;\dots \\
-0 &amp; \sigma'(z_2) &amp; 0 &amp; \dots \\
-\vdots
-\end{pmatrix}$$</p>
-<p>Now, we can view $C$ as a function of $z$ values as follows:</p>
-<p>$$C\circ \Sigma (z_1^L,\dots, z_n^L)$$</p>
-<p>Then, the vector $\delta^L$ is the transpose of the Jacobian:</p>
-<p>$$\delta^L=\nabla C\circ \Sigma (z_1^L,\dots, z_n^L)=(\partial C\circ \Sigma (z_1^L,\dots, z_n^L))^T$$</p>
-<p>Applying the chain rule:</p>
-<p>$$\delta^L=(\partial C(\Sigma (z_1^L,\dots, z_n^L))\Sigma' (z_1^L,\dots, z_n^L))^T$$</p>
-<p>Distributing the tranposition using $(AB)^T=B^TA^T$:</p>
-<p>$$= \Sigma' (z_1^L,\dots, z_n^L)\nabla C(\Sigma (z_1^L,\dots, z_n^L))$$</p>
-<p>because $\Sigma'$ is symmetric. This then simplifies to the desired result using $a^L=\Sigma(z^L)$.</p>
-<h3 id="equation-2">Equation 2</h3>
-<p>Follows from an analogous modification of the proof of the componentwise version of equation 2.</p>
-<h3 id="third-exercise">Third exercise</h3>
-<p>This is &quot;telescoping out&quot; the recurrence for $\delta^l$ in terms of $\delta^{l+1}$.</p>
-<h2 id="using-matrices-for-minibatches">Using matrices for minibatches</h2>
-<p>This is a modification of the algorithm to avoid having to iterate over the minibatch, by storing it as the columns of a matrix.</p>
-<p><strong>Input</strong>: The $m$ training examples $x_1,\dots,x_m$ that belong to the minibatch. Store these as an $r\times m$ matrix of activations (where $r$ is the size of each $x_i$):</p>
-<p>$$A=\begin{pmatrix}
-x_1, &amp; \dots ,&amp; x_m
-\end{pmatrix}$$</p>
-<p>Create a similar matrix $b^l$ to store biases, with duplicated columns.</p>
-<p><strong>Feedforward</strong>: In this stage of the algorithm, we want to update $A$ once for each layer in the network. Multiplying $A$ by the weights matrices has the desired effect.</p>
-<p>For $2\leq l \leq L$:</p>
-<p>$A\gets w^lA, A\gets A+b^l, Z^l\gets A, A\gets\sigma(A)$</p>
-<p><strong>Error from the output layer</strong>:</p>
-<p>$\delta^L\gets \nabla C(A)\odot\sigma'(Z^L)$</p>
-<p>applying $\sigma'$ elementwise.</p>
-<p><strong>Backpropogation</strong>: Again, all operations can be applied as usual on the larger matrix to obtain $\delta^1,\dots,\delta^{L-1}$.</p>
-<p><strong>Gradient descent</strong>:</p>
-<p>In this stage, we must average the rows of the $\delta$s to find the size of the adjustements to be made to the weights and biases. I think the most performative way to do this is to iterate, or maybe multiplying with a matrix of 1s is easier (???).</p>
+$$\frac{\partial C}{\partial b}=\frac{\partial C}{\partial z}\frac{\partial z}{\partial b}=\delta\cdot 1$$
+
+because $\frac{\partial}{\partial b}(b+\sum_iw_i\dots)=1$
+
+
+### Equation 4: Derivative WRT weights
+For a weight $w_{jk}^l$:
+$$\frac{\partial C}{\partial w_{jk}^l}=a_k^{l-1}\delta_j^i$$.
+
+__Intuition__: changing a weight effects the cost in proportion with the activation of the neuron that is "feeding into" the edge controlled by that weight.
+
+__Proof__: identical to previous but differentiate with respect to the weight instead of the bias.
+
+
+## Exercise: matrix forms
+
+### Equation 1
+
+We view the activation function as $\Sigma:\mathbb{R}^n\rightarrow\mathbb{R}^n$, where $n$ is the size of the $L^{th}$ layer, with $\Sigma(z_1,\dots,z_n):=(\sigma(z_1),\dots,\sigma(z_n))$. Hence, its Jacobian matrix $\Sigma'(z)$ is an
+$n\times n$ matrix in the form
+
+$$\begin{pmatrix}
+    \sigma'(z_1) & 0 & 0 &\dots \\\\
+    0 & \sigma'(z_2) & 0 & \dots \\\\
+    \vdots
+\end{pmatrix}$$
+
+Now, we can view $C$ as a function of $z$ values as follows:
+
+$$C\circ \Sigma (z_1^L,\dots, z_n^L)$$
+
+Then, the vector $\delta^L$ is the transpose of the Jacobian:
+
+$$\delta^L=\nabla C\circ \Sigma (z_1^L,\dots, z_n^L)=(\partial C\circ \Sigma (z_1^L,\dots, z_n^L))^T$$
+
+Applying the chain rule:
+
+$$\delta^L=(\partial C(\Sigma (z_1^L,\dots, z_n^L))\Sigma' (z_1^L,\dots, z_n^L))^T$$
+
+Distributing the tranposition using $(AB)^T=B^TA^T$:
+
+$$= \Sigma' (z_1^L,\dots, z_n^L)\nabla C(\Sigma (z_1^L,\dots, z_n^L))$$
+
+because $\Sigma'$ is symmetric. This then simplifies to the desired result using $a^L=\Sigma(z^L)$.
+
+### Equation 2
+
+Follows from an analogous modification of the proof of the componentwise version of equation 2.
+
+### Third exercise
+
+This is "telescoping out" the recurrence for $\delta^l$ in terms of $\delta^{l+1}$.
+
+## Using matrices for minibatches
+
+This is a modification of the algorithm to avoid having to iterate over the minibatch, by storing it as the columns of a matrix.
+
+__Input__: The $m$ training examples $x_1,\dots,x_m$ that belong to the minibatch. Store these as an $r\times m$ matrix of activations (where $r$ is the size of each $x_i$):
+
+$$A=\begin{pmatrix}
+    x_1, & \dots ,& x_m
+\end{pmatrix}$$
+
+Create a similar matrix $b^l$ to store biases, with duplicated columns.
+
+__Feedforward__: In this stage of the algorithm, we want to update $A$ once for each layer in the network. Multiplying $A$ by the weights matrices has the desired effect.
+
+For $2\leq l \leq L$:
+
+$A\gets w^lA, A\gets A+b^l, Z^l\gets A, A\gets\sigma(A)$
+
+__Error from the output layer__: 
+
+$\delta^L\gets \nabla C(A)\odot\sigma'(Z^L)$
+
+applying $\sigma'$ elementwise.
+
+__Backpropogation__: Again, all operations can be applied as usual on the larger matrix to obtain $\delta^1,\dots,\delta^{L-1}$.
+
+__Gradient descent__:
+
+In this stage, we must average the rows of the $\delta$s to find the size of the adjustements to be made to the weights and biases. I think the most performative way to do this is to iterate, or maybe multiplying with a matrix of 1s is easier (???).
+
 <style>
     body{padding:0 10%}
 </style>
-<h1 id="chapter-3-improved-learning">Chapter 3: Improved learning</h1>
-<h2 id="cross-entropy">Cross-entropy</h2>
-<p>The version used here for a layer of sigmoid neurons differs from the usual information theoretic definition of cross-entropy (because the outputs do not represent a probability distribution over all possible classifications, so instead consider each neuron as being a Bernoulli distribution). The problem being solved is that with quadratic cost, there is a $\sigma'$ term in the derivative meaning that learning is slow when an activation is very high or low.</p>
-<p>$$C:=-\frac{1}{n}\sum_x y\log(a)+(1-y)\log(1-a)$$</p>
-<p>with the sum over $x$ to account for each example, and $y$ being the desired output. Using the chain rule and manipulation:</p>
-<p>$$\frac{\partial C}{\partial w_j}=x_j(a-y) \text{  (averaged over training examples)}$$</p>
-<p>which lacks a $\sigma'$ term.</p>
-<h3 id="exercise-show-that-c-is-minimized-when-ay">Exercise: show that $C$ is minimized when $a=y$</h3>
-<p>Consider one training example:</p>
-<p>$$\frac{dC}{da}=-\frac{y}{a}+\frac{1-y}{1-a}$$</p>
-<p>which is clearly 0 when $a=y$. It can be further verified that this stationary point is a minimum by differentiating again.</p>
-<h3 id="exercise-extending-to-networks-with-multiple-neurons-and-layers">Exercise: extending to networks with multiple neurons and layers</h3>
-<p>The crux of the exercise is to show that for a single training example $\delta^L=a^L-y$. Consider components of $\delta^L$:</p>
-<p>$$\delta^L_j=\frac{\partial C}{\partial z^L_j}=\frac{\partial}{\partial z_j^L}-\sum_jy_j\log(a_j^L)+(1-y_j)\log(1-a_j^L)$$</p>
-<h3 id="exercise-why-xj-cant-be-eliminated">Exercise: why $x_j$ can't be eliminated</h3>
-<p>Because the derivative of the cost can't depend on $x_j$ - there are many different values of $x_j$ that would result in the same cost.</p>
-<h2 id="softmax">Softmax</h2>
-<p>Using softmax for the output layer means that the activations form a probability distribution (sum to 1).</p>
-<p>Enables use of log-liklihood cost function without slowdown:</p>
-<p>$$C=-\log a_c^l$$</p>
-<p>where $c$ is the index of the output neuron that we desire to be fully activated (using one-hot encoding).</p>
-<h3 id="exercise-inverting-softmax">Exercise: inverting softmax</h3>
-<p>$$\log(a_j)=z_j-\log\left(\sum_i e^{z_i}\right)$$</p>
-<p>as required.</p>
-<h3 id="exercise-partial-derivatives-of-log-liklihood-cost-with-softmax">Exercise: Partial derivatives of log-liklihood cost with softmax</h3>
-<p>It suffices to find an expression for $\delta_j^L$ and then the results follow. The key difference now is that activations depend on all other $z$-values (so $\delta$ doesn't vanish when $j \neq c$):</p>
-<p>$$\delta^L_j=\sum_i \frac{\partial a_i^L}{\partial z_j^L}\frac{\partial C}{\partial a_i^L} $$</p>
-<p>The non-vanishing term is $\frac{\partial C}{\partial a_c^L}\frac{a_c^L}{z_J^L}=\frac{-1}{a_c^L}\frac{a_c^L}{z_J^L}=$. Then evaluate the second derivative.</p>
-<h2 id="overfitting-and-regularization">Overfitting and regularization</h2>
-<p>The cost function can be reduced in two ways - memorizing specifics of the training data (overfitting), or by learning a general solution that works even on data outside of the training dataset. We want the latter to happen - so we tweak the hypothesis space and the optimisation over it.</p>
-<p>One way to do this is to stop training early, once the performance on the validation data is no longer improving - with the intuition being that any further reduction that reduces the training loss without also reducing the validation loss is probably overfitting. Scaling up the amount of data used can also make it harder to improve the cost via overfitting.</p>
-<p>Weight decay (L2 regularisation, in this case) is another approach to make it more likely that the network will generalise: it adds on a $\frac{\lambda}{2n}\sum_ww^2$ term to the cost. This encourages the network to have fewer extreme weight values and hence to learn lower complexity functions which are more likely to be general explanations as opposed to memorisation of specific datapoints: it can't &quot;afford&quot; to overreact to single datapoints.</p>
-<p>L1 regularisation adds on the $\ell_1$ norm of the weights to the cost - which results in a few very high activation weights, as the reduction is constant.</p>
-<p>Dropout randomly excludes a subset of the neurons when performing SGD. This can be seen as averaging the outputs of many different networks. There is also an effect of forcing each neuron to learn a robustly useful feature, that does not rely on the presence of other neurons to be useful.</p>
-<p>Another approach is to generate more training examples by applying small perturbations to current ones (data augmentation). This makes the training loss more closely correlated with performance over all inputs.</p>
-<h2 id="weight-initialisation">Weight initialisation</h2>
-<p>If we use a normal distribution with constant variance, then in expectation the magnitudes  of activations will be high - meaning that learning slowdown occurs with sigmoid activation. A solution is to divide the variance by the size of the layer to reduce expected activation magnitudes.</p>
-<h3 id="exercise-standard-deviation-of-activation">Exercise: standard deviation of activation</h3>
-<p>$$\text{Var}(b+\sum_{i=1}^{500}w_i)=\text{Var}(b)+\text{Var}(\sum_{i=1}^{500}w_i)=1+500\frac{1}{1000}=\frac{3}{2}$$</p>
-<p>Square root to get desired standard deviation.</p>
-<h3 id="problem-connecting-regularization-and-the-improved-method-of-weight-initialization">Problem: Connecting regularization and the improved method of weight initialization</h3>
-<p>If the old approach to weight initialisation is used, then in early epochs the weights will be high and the fastest way to decrease the cost locally will be to reduce the magnitude of the weights instead of achieving better classification accuracy.</p>
 
-</body>
-</html>
+# Chapter 3: Improved learning
+
+## Cross-entropy
+
+The version used here for a layer of sigmoid neurons differs from the usual information theoretic definition of cross-entropy (because the outputs do not represent a probability distribution over all possible classifications, so instead consider each neuron as being a Bernoulli distribution). The problem being solved is that with quadratic cost, there is a $\sigma'$ term in the derivative meaning that learning is slow when an activation is very high or low.
+
+$$C:=-\frac{1}{n}\sum_x y\log(a)+(1-y)\log(1-a)$$
+
+with the sum over $x$ to account for each example, and $y$ being the desired output. Using the chain rule and manipulation:
+
+$$\frac{\partial C}{\partial w_j}=x_j(a-y) \text{  (averaged over training examples)}$$
+
+which lacks a $\sigma'$ term.
+
+### Exercise: show that $C$ is minimized when $a=y$
+
+Consider one training example:
+
+$$\frac{dC}{da}=-\frac{y}{a}+\frac{1-y}{1-a}$$
+
+which is clearly 0 when $a=y$. It can be further verified that this stationary point is a minimum by differentiating again.
+
+### Exercise: extending to networks with multiple neurons and layers
+
+The crux of the exercise is to show that for a single training example $\delta^L=a^L-y$. Consider components of $\delta^L$:
+
+$$\delta^L_j=\frac{\partial C}{\partial z^L_j}=\frac{\partial}{\partial z_j^L}-\sum_jy_j\log(a_j^L)+(1-y_j)\log(1-a_j^L)$$
+
+### Exercise: why $x_j$ can't be eliminated
+
+Because the derivative of the cost can't depend on $x_j$ - there are many different values of $x_j$ that would result in the same cost.
+
+## Softmax
+
+Using softmax for the output layer means that the activations form a probability distribution (sum to 1).
+
+Enables use of log-liklihood cost function without slowdown:
+
+$$C=-\log a_c^l$$
+
+where $c$ is the index of the output neuron that we desire to be fully activated (using one-hot encoding).
+### Exercise: inverting softmax
+
+$$\log(a_j)=z_j-\log\left(\sum_i e^{z_i}\right)$$
+
+as required.
+
+### Exercise: Partial derivatives of log-liklihood cost with softmax
+
+It suffices to find an expression for $\delta_j^L$ and then the results follow. The key difference now is that activations depend on all other $z$-values (so $\delta$ doesn't vanish when $j \neq c$):
+
+$$\delta^L_j=\sum_i \frac{\partial a_i^L}{\partial z_j^L}\frac{\partial C}{\partial a_i^L} $$
+
+The non-vanishing term is $\frac{\partial C}{\partial a_c^L}\frac{a_c^L}{z_J^L}=\frac{-1}{a_c^L}\frac{a_c^L}{z_J^L}=$. Then evaluate the second derivative.
+
+## Overfitting and regularization
+
+The cost function can be reduced in two ways - memorizing specifics of the training data (overfitting), or by learning a general solution that works even on data outside of the training dataset. We want the latter to happen - so we tweak the hypothesis space and the optimisation over it.
+
+One way to do this is to stop training early, once the performance on the validation data is no longer improving - with the intuition being that any further reduction that reduces the training loss without also reducing the validation loss is probably overfitting. Scaling up the amount of data used can also make it harder to improve the cost via overfitting.
+
+Weight decay (L2 regularisation, in this case) is another approach to make it more likely that the network will generalise: it adds on a $\frac{\lambda}{2n}\sum_ww^2$ term to the cost. This encourages the network to have fewer extreme weight values and hence to learn lower complexity functions which are more likely to be general explanations as opposed to memorisation of specific datapoints: it can't "afford" to overreact to single datapoints.
+
+L1 regularisation adds on the $\ell_1$ norm of the weights to the cost - which results in a few very high activation weights, as the reduction is constant.
+
+Dropout randomly excludes a subset of the neurons when performing SGD. This can be seen as averaging the outputs of many different networks. There is also an effect of forcing each neuron to learn a robustly useful feature, that does not rely on the presence of other neurons to be useful.
+
+Another approach is to generate more training examples by applying small perturbations to current ones (data augmentation). This makes the training loss more closely correlated with performance over all inputs.
+
+## Weight initialisation
+
+If we use a normal distribution with constant variance, then in expectation the magnitudes  of activations will be high - meaning that learning slowdown occurs with sigmoid activation. A solution is to divide the variance by the size of the layer to reduce expected activation magnitudes.
+
+### Exercise: standard deviation of activation
+
+$$\text{Var}(b+\sum_{i=1}^{500}w_i)=\text{Var}(b)+\text{Var}(\sum_{i=1}^{500}w_i)=1+500\frac{1}{1000}=\frac{3}{2}$$
+
+Square root to get desired standard deviation.
+
+### Problem: Connecting regularization and the improved method of weight initialization
+
+If the old approach to weight initialisation is used, then in early epochs the weights will be high and the fastest way to decrease the cost locally will be to reduce the magnitude of the weights instead of achieving better classification accuracy.
+
+# Chapter 4: Decoder-only transformer architecture
+
+This section is largely based on [A Mathematical Framework for Transformer Circuits](https://transformer-circuits.pub/2021/framework/index.html) and [Attention is all you need](https://arxiv.org/pdf/1706.03762.pdf).
+
+The task is to transform a sequence of tokens into a probability distribution (e.g. over the next token in the autoregressive case). This is achieved by representing the token sequence as a sequence of vectors, performing some transformations on the vectors, and then using a linear layer to convert the final sequence of transformed vectors into logits describing the distribution for the token that should come after each position.
+
+But what exact processing is done?
+
+Suppose that the input tokens are $t=(t_1,\dots, t_n)$, using a one-hot encoding. The first step is to embedd the tokens, using an embedding matrix $E\in\mathbb{R}^{d\times N}$ where $N$ is the number of tokens and $d$ is the embedding size of the model. To this embedding, a positional embedding $p=(p_1, \dots,p_n)$ of the same dimension is added (in order to allow the model to reference the position of a token). Let $x_0=t+p$.
+
+Then, the model computes successive states of the "residual stream" $x_1,\dots,x_l$ by $x_{i}=x_{i-1}+f_i(x_{i-1})$ - i.e. adding on functions of the residual stream. These functions $f_i$ correspond to either *masked multi-head attention* or feedforward neural networks.
+
+## Attention
+
+The role of attention in transformers is to allow a token in the residual stream to keep track of information that is given by other tokens.
+
+A high-level view of an attention layer is that our goal is to compute some matrix $A\in\mathbb{R}^{n\times n}$ such that the entry $A_{ij}$ is a scalar that controls
+how much information is transferred from position $j$ to position $i$. *Multi-head* attention does not use only a single attention matrix: with $h$ attention heads we instead extract $h$ subspaces from each position in the residual stream and shuffle around information from each subspace independently. The subspaces are controlled by learnt linear projections. This allows for each attention head to specialise.
+
+### A single attention head
+
+Let $h$ be the map corresponding to an attention head of head dimension $k$.
+
+The attention head is parametrised by matrices $W_k\in\mathbb{R}^{d \times k}$ (the key projection), $W_q\in\mathbb{R}^{d \times k}$ (the query projection), $W_v\in\mathbb{R}^{d \times k}$ (the value projection) and $W_o\in\mathbb{R}^{k \times d}$ (the output map). Its output it given by:
+
+$$h(x)=(A (x W_v^T)) W_o^T$$
+
+where $A$ is the attention matrix of the head, given by:
+
+$$A_{ij}=\text{softmax}_j\left(\frac{x_i^TW_q^TW_kx_j}{\sqrt{k}}\right)$$
+
+An intuition for this formula for $A$ is that the amount of information transferred to position $i$ from position $j$ is an increasing function of how closely the query vector of $i$ aligns with the key vector of $j$. In this sense, the query vector encodes a "type of thing" that the model is looking for to transfer information from, and the key is the type of thing stored at a given position. The terms are an analogy to database lookups.
+
+*Masked* attention sets $A_{ij}=0$ whenever $i<j$. The interpretation of this is that positions may not take information from tokens that are ahead in the sequence.
+
+### Combining heads
+
+In each attention layer there are $d/k$ heads. They are combined by adding together their outputs:
+
+$$(h_1,\dots,h_{d/k})(x)=\sum_{j} (A_j (x W_{v,j}^T)) W_{o,j}^T$$
+
+This is equivalent to concatention and then projection using a matrix that combines all of the $W_{o,i}$ matrices - a perspective that is in fact used in implementations as it involves fewer matrix multiplications.
