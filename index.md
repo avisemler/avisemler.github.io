@@ -9,7 +9,7 @@ Hi! I'm a maths and computer science student with interests including maths, sta
 deep learning (safety), programming, and linguistics.
 
 ## Writing
-
+ - [Blog](https://avisemler.substack.com/)
  - [Notes on deep learning](/nnnotes/)
  - [Notes on graph algorithms](/files/graphtheory.pdf)
  - [Bounds on half-Ramsey numbers](/files/Probabilistic_Ramsey_Numbers.pdf), a generalisation of Ramsey theory
