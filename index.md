@@ -10,7 +10,7 @@ Hi! I'm Avi, and I'm interested in AI safety, historical linguistics, maths, and
 ## Publications
 1. **[Implicit Regularization of AdaDelta](https://openreview.net/pdf?id=nm40lbbwoR)**  
  Matthias Englert, Ranko Lazic, Avi Semler (equal contribution). *Transactions on Machine Learning Research*, 2024.
-2. **[Image Restoration for Training Data Reconstructed from Trained Neural Networks](https://openreview.net/forum?id=x0h4H1WHXk)**
+2. **[Image Restoration for Training Data Reconstructed from Trained Neural Networks](https://openreview.net/forum?id=x0h4H1WHXk)**  
  Matthias Englert, Ranko Lazic, Avi Semler. Withdrawn conference submission.
 
 ## Other 
