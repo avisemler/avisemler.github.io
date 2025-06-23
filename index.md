@@ -8,9 +8,12 @@ title: "Home"
 Hi! I'm Avi, and I'm interested in AI safety, historical linguistics, maths, and computer science.
 
 ## Publications
-1. **[Implicit Regularization of AdaDelta](https://openreview.net/pdf?id=nm40lbbwoR)** (Matthias Englert, Ranko Lazic, *Avi Semler* - equal contribution)
+1. **[Implicit Regularization of AdaDelta](https://openreview.net/pdf?id=nm40lbbwoR)**  
+ Matthias Englert, Ranko Lazic, Avi Semler (equal contribution). *Transactions on Machine Learning Research*, 2024.
+2. **[Image Restoration for Training Data Reconstructed from Trained Neural Networks](https://openreview.net/forum?id=x0h4H1WHXk)**
+ Matthias Englert, Ranko Lazic, Avi Semler. Withdrawn conference submission.
 
-## Other things
+## Other 
  - [Blog](https://manateeofmanatees.substack.com/) about various things I'm interested in
  - [Using AI to detect emotions from images of eyes](https://substack.com/@manateeofmanatees/p-145666394). I evaluated CLIP embeddings and multi-modal language models for this task
  - Agent-based [simulation of congested systems](https://github.com/avisemler/vectorised_q_learning) such as transport, originally developed in 2023 as part of the University of Warwick Undergraduate Research Support Scheme and then vectorised with PyTorch
