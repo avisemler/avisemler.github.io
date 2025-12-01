@@ -423,8 +423,8 @@
                     <strong><a href="https://openreview.net/pdf?id=nm40lbbwoR">Implicit Regularization of AdaDelta</a></strong><br>
                     Matthias Englert, Ranko Lazic, <span class="author-name">Avi Semler</span> (equal contribution). <em>Transactions on Machine Learning Research</em>, 2024.
                     <div class="pub-description">
-                        <span class="preview">We prove that the AdaDelta optimizer exhibits implicit regularization in the context of separable linear classification.</span>
-                        <span class="full-text">We prove that the AdaDelta optimizer exhibits implicit regularization in the context of separable linear classification. This work provides theoretical foundations for understanding why adaptive learning rate methods can generalize well despite their ability to fit training data perfectly.</span>
+                        <span class="preview">We consider the AdaDelta adaptive optimization algorithm on locally Lipschitz, positively homogeneous, and o-minimally definable neural networks, with either the exponential or the logistic loss.</span>
+                        <span class="full-text">We consider the AdaDelta adaptive optimization algorithm on locally Lipschitz, positively homogeneous, and o-minimally definable neural networks, with either the exponential or the logistic loss.  We prove that, after achieving perfect training accuracy, the resulting adaptive gradient flows converge in direction to a Karush-Kuhn-Tucker point of the margin maximization problem, i.e. perform the same implicit regularization as the plain gradient flows.  We also prove that the loss decreases to zero and the Euclidean norm of the parameters increases to infinity at the same rates as for the plain gradient flows.  Moreover, we consider generalizations of AdaDelta where the exponential decay coefficients may vary with time and the numerical stability terms may be different across the parameters, and we obtain the same results provided the former do not approach 1 too quickly and the latter have isotropic quotients.  Finally, we corroborate our theoretical results by numerical experiments on convolutional networks with MNIST and CIFAR-10 datasets.</span>
                     </div>
                     <button class="expand-btn" onclick="toggleDescription(this)">Read more</button>
                 </div>
@@ -436,19 +436,33 @@
                     Matthias Englert, Ranko Lazic, <span class="author-name">Avi Semler</span>. Withdrawn conference submission.
                     <div class="pub-description">
                         <span class="preview">We investigate techniques to improve the quality of training images reconstructed from model parameters, addressing privacy concerns in deep learning.</span>
-                        <span class="full-text">We investigate techniques to improve the quality of training images reconstructed from model parameters, addressing privacy concerns in deep learning. Our methods enhance the visual fidelity of reconstructed data, demonstrating vulnerabilities in the privacy of training datasets.</span>
+                        <span class="full-text">Haim et al. [NeurIPS 2022] propose a method to reconstruct training data from trained neural networks with impressive results. While their reconstructed images resemble the original training images, most of them also contain a considerable amount of noise and artifacts. This is especially true, when the network was trained on more than just a few dozen images. To address this, we view the problem as a specific image restoration task. Since the noise and artifacts are different from other types of noise (Gaussian noise, compression artifacts, blurring, or impulse noise from digital cameras), we create a new dataset specifically for the restoration of images produced by the reconstruction process proposed by Haim et al. We use this dataset consisting of about 60 million noisy reconstructions of CIFAR-10 images to train a diffusion model on the restoration task. Using this method, we obtain reconstructions that are significantly closer to the original training images measured in terms of SSIM and HaarPSI scores.</span>
                     </div>
                     <button class="expand-btn" onclick="toggleDescription(this)">Read more</button>
                 </div>
             </li>
             <li>
-                <img src="https://via.placeholder.com/120x120/D4756C/ffffff?text=Thesis" alt="Publication thumbnail" class="pub-image">
+                <img src="diss_img.png" alt="Publication thumbnail" class="pub-image">
                 <div class="pub-content">
                     <strong>Evaluating and Interpreting Transformers for Sequence Alignment</strong> (MSc dissertation)<br>
                     <span class="author-name">Avi Semler</span>. 2025.
                     <div class="pub-description">
                         <span class="preview">This dissertation explores how transformer models perform sequence alignment tasks, with a focus on understanding their internal representations and decision-making processes.</span>
-                        <span class="full-text">This dissertation explores how transformer models perform sequence alignment tasks, with a focus on understanding their internal representations and decision-making processes. The work contributes to interpretability research in natural language processing and bioinformatics applications.</span>
+                        <span class="full-text">This dissertation evaluates and interprets an encoder-decoder transformer model for
+    pairwise DNA sequence alignment, using synthetic data generated from a pair
+    Hidden Markov Model (pair HMM) as ground truth to better understand the
+    black-box nature of deep learning approaches to alignment. We assess the
+    transformer model’s ability to replicate optimal alignments and probability
+    distributions defined by the pair-HMM, employing constrained beam search
+    and comparing output distributions. Mechanistic interpretability techniques,
+    including linear probing and LogitLens, are used to analyse internal computations
+    including inference of evolutionary parameters. Results indicate the transformer
+    effectively approximates pair-HMM likelihoods and distributions on synthetic
+    data, with linear probes confirming its capacity to implicitly learn evolutionary
+    parameters almost as accurately as is theoretically possible. This interpretability
+    analysis offers insight into the model’s computational mechanism, enhancing
+    confidence in the models probability distribution over alignments but casting
+    doubt on the efficacy of beam search.</span>
                     </div>
                     <button class="expand-btn" onclick="toggleDescription(this)">Read more</button>
                 </div>
