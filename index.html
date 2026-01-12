@@ -49,12 +49,13 @@
         }
 
         .site-header h1 {
-            font-size: 1.9rem;
+            font-size: 2.4rem;
             color: #fafaff;
             text-align: center;
             font-weight: 600;
-            margin-bottom: 0;
+            margin-bottom: 0.25rem;
             letter-spacing: -0.02em;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
         }
 
         /* Social media buttons - top header */
@@ -75,11 +76,19 @@
             color: #e4d9ff;
             border: none;
             text-decoration: none;
+            transition: all 0.2s ease;
+            border-radius: 50%;
+        }
+
+        .social-btn:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
         }
 
         .social-btn svg {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             fill: currentColor;
         }
 
@@ -95,11 +104,11 @@
 
         /* Hero image */
         .hero-image {
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
             object-fit: cover;
             float: right;
-            margin: 0 0 1rem 1.5rem;
+            margin: 0 0 1.5rem 2rem;
         }
 
         /* Typography */
@@ -184,6 +193,7 @@
             color: var(--primary-color);
             text-decoration: underline;
             font-weight: 500;
+            transition: color 0.15s ease;
         }
 
         a:hover {
@@ -217,13 +227,19 @@
         }
 
         ul li {
-            padding: 0.4rem 0 0.4rem 1.5rem;
+            padding: 0.6rem 0 0.6rem 1.5rem;
             background: none;
             border-left: none;
             border-radius: 0;
             box-shadow: none;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
             position: relative;
+            transition: all 0.15s ease;
+        }
+
+        ul li:hover {
+            background: rgba(39, 52, 105, 0.03);
+            border-radius: 6px;
         }
 
         ul li::before {
