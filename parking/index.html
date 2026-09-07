@@ -61,6 +61,39 @@
         .pill { display:inline-block; font-size:11px; padding:1px 8px; border-radius:999px;
                 background:#eceff1; color:#455a64; margin-left:6px; vertical-align:middle; }
 
+        /* Street search */
+        .search-wrap { position: relative; margin-bottom: 16px; }
+        #street-search {
+            width: 100%; padding: 10px 34px 10px 34px; border: 1px solid #dadce0;
+            border-radius: 10px; font-size: 14px; outline: none; color: var(--ink);
+            transition: border-color .12s, box-shadow .12s;
+        }
+        #street-search:focus { border-color: var(--brand); box-shadow: 0 0 0 3px rgba(26,115,232,.15); }
+        .search-wrap .search-icon {
+            position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+            color: var(--muted); font-size: 14px; pointer-events: none;
+        }
+        #search-clear {
+            position: absolute; right: 7px; top: 50%; transform: translateY(-50%);
+            border: none; background: transparent; cursor: pointer; color: var(--muted);
+            font-size: 15px; line-height: 1; padding: 4px 6px; border-radius: 6px; display: none;
+        }
+        #search-clear:hover { background: #f1f3f4; color: var(--ink); }
+        #suggestions {
+            position: absolute; top: calc(100% + 4px); left: 0; right: 0; background: #fff;
+            border: 1px solid #e3e3e3; border-radius: 10px; box-shadow: 0 6px 20px rgba(0,0,0,.16);
+            max-height: 300px; overflow-y: auto; z-index: 5; display: none;
+        }
+        .sugg {
+            padding: 9px 12px; cursor: pointer; font-size: 13.5px; display: flex;
+            justify-content: space-between; align-items: center; gap: 10px;
+            border-bottom: 1px solid #f1f3f4;
+        }
+        .sugg:last-child { border-bottom: none; }
+        .sugg:hover, .sugg.active { background: #eef3fe; }
+        .sugg .nm { font-weight: 500; }
+        .sugg .cnt { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
+
         /* Map controls */
         .map-btn {
             position: absolute; z-index: 2; background: #fff; border: none;
@@ -138,6 +171,12 @@
             </div>
         </div>
         <div id="sidebar">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input id="street-search" type="text" placeholder="Search a street…" autocomplete="off" spellcheck="false" />
+                <button id="search-clear" title="Clear search">✕</button>
+                <div id="suggestions"></div>
+            </div>
             <div class="sidebar-head">
                 <h2 id="sidebar-title">Nearby Restrictions</h2>
                 <span id="count-badge">–</span>
@@ -155,6 +194,7 @@
         const QUERY_LAYERS = ['parking-line', 'parking-point', 'parking-fill'];
 
         let map, userMarker, userLocation = null, openPopup = null;
+        let streetIndex = [], activeStreet = null, streetMarker = null;
 
         const protocol = new pmtiles.Protocol();
         maplibregl.addProtocol('pmtiles', protocol.tile);
@@ -357,11 +397,38 @@
         function setBadge(n) { document.getElementById('count-badge').textContent = n; }
 
         function refreshNearby() {
-            if (!map || !userLocation) return;
-            document.getElementById('sidebar-title').textContent = 'Nearby Restrictions';
+            if (!map) return;
             const list = document.getElementById('restrictions-list');
-
             const feats = dedupe(map.queryRenderedFeatures({ layers: QUERY_LAYERS }));
+
+            // Street-focus mode: filter to the searched street only
+            if (activeStreet) {
+                const nameU = activeStreet.n;
+                const sf = feats
+                    .filter(f => ((f.properties || {}).street_name || '').toUpperCase() === nameU)
+                    .map(f => {
+                        const c = repCoord(f.geometry) || [activeStreet.lo, activeStreet.la];
+                        return { p: f.properties || {}, lon: c[0], lat: c[1] };
+                    });
+                document.getElementById('sidebar-title').textContent = titleCase(nameU);
+                setBadge(sf.length);
+                const back = `<div style="margin-top:14px"><button class="reset-btn" onclick="clearSearch()">← Back to nearby</button></div>`;
+                if (!sf.length) {
+                    list.innerHTML = '<div class="loader">This street\'s restrictions aren\'t in view yet.<br>Zoom out slightly or pan to it.</div>' + back;
+                    return;
+                }
+                list.innerHTML = sf.map(it => `
+                    <div class="restriction-item" style="border-left-color:${colorFor(it.p.restriction)}"
+                         onclick="flyTo(${it.lon},${it.lat})">
+                        <div class="restriction-street">${it.p.street_name || 'Unknown Street'}</div>
+                        <div class="restriction-type">${it.p.restriction || it.p.order_type || 'No info'}</div>
+                        <div class="restriction-distance"><span class="pill">${it.p.side_of_road || 'N/A'}</span>${it.p.length ? `<span class="pill">${it.p.length} m</span>` : ''}</div>
+                    </div>`).join('') + back;
+                return;
+            }
+
+            if (!userLocation) return;
+            document.getElementById('sidebar-title').textContent = 'Nearby Restrictions';
             setBadge(feats.length);
 
             const items = feats.map(f => {
@@ -385,6 +452,8 @@
         }
 
         function onMapClick(e) {
+            activeStreet = null;
+            if (streetMarker) { streetMarker.remove(); streetMarker = null; }
             const b = 8;
             const feats = dedupe(map.queryRenderedFeatures(
                 [[e.point.x-b, e.point.y-b], [e.point.x+b, e.point.y+b]], { layers: QUERY_LAYERS }
@@ -445,6 +514,86 @@
                 () => setStatus('Location unavailable')
             );
         };
+
+        // ---------- Street search ----------
+        const searchEl = document.getElementById('street-search');
+        const suggEl   = document.getElementById('suggestions');
+        const clearEl  = document.getElementById('search-clear');
+        let sugMatches = [], sugActive = -1;
+
+        function titleCase(s) {
+            return (s || '').toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+        }
+
+        async function loadStreets() {
+            try {
+                const r = await fetch('streets.json');
+                if (r.ok) streetIndex = await r.json();
+            } catch (e) { console.warn('Street index unavailable:', e); }
+        }
+
+        function hideSugg() { suggEl.style.display = 'none'; sugActive = -1; }
+
+        function renderSugg() {
+            if (!sugMatches.length) { hideSugg(); return; }
+            suggEl.innerHTML = sugMatches.map((e, i) => `
+                <div class="sugg${i === sugActive ? ' active' : ''}" data-i="${i}">
+                    <span class="nm">${titleCase(e.n)}</span>
+                    <span class="cnt">${e.c} spot${e.c > 1 ? 's' : ''}</span>
+                </div>`).join('');
+            suggEl.style.display = 'block';
+            suggEl.querySelectorAll('.sugg').forEach(el => {
+                el.onmousedown = ev => { ev.preventDefault(); selectStreet(sugMatches[+el.dataset.i]); };
+            });
+        }
+
+        function doSearch() {
+            const q = searchEl.value.trim().toUpperCase();
+            clearEl.style.display = q ? 'block' : 'none';
+            if (q.length < 2) { hideSugg(); return; }
+            const m = [];
+            for (const e of streetIndex) if (e.n.includes(q)) m.push(e);
+            m.sort((a, b) =>
+                (a.n.startsWith(q) ? 0 : 1) - (b.n.startsWith(q) ? 0 : 1)
+                || b.c - a.c || a.n.localeCompare(b.n));
+            sugMatches = m.slice(0, 12);
+            sugActive = -1;
+            renderSugg();
+        }
+
+        function selectStreet(e) {
+            if (!e || !map) return;
+            activeStreet = e;
+            searchEl.value = titleCase(e.n);
+            hideSugg();
+            if (streetMarker) streetMarker.remove();
+            streetMarker = new maplibregl.Marker({ color: '#e91e63' }).setLngLat([e.lo, e.la]).addTo(map);
+            if (openPopup) { openPopup.remove(); openPopup = null; }
+            map.flyTo({ center: [e.lo, e.la], zoom: 16.5, speed: 1.5 });
+            setTimeout(refreshNearby, 650); // in case moveend fires before tiles paint
+        }
+
+        function clearSearch() {
+            searchEl.value = '';
+            clearEl.style.display = 'none';
+            hideSugg();
+            activeStreet = null;
+            if (streetMarker) { streetMarker.remove(); streetMarker = null; }
+            refreshNearby();
+        }
+
+        searchEl.addEventListener('input', doSearch);
+        searchEl.addEventListener('focus', doSearch);
+        searchEl.addEventListener('keydown', ev => {
+            if (suggEl.style.display !== 'block') return;
+            if (ev.key === 'ArrowDown') { sugActive = Math.min(sugActive + 1, sugMatches.length - 1); renderSugg(); ev.preventDefault(); }
+            else if (ev.key === 'ArrowUp') { sugActive = Math.max(sugActive - 1, 0); renderSugg(); ev.preventDefault(); }
+            else if (ev.key === 'Enter') { selectStreet(sugMatches[sugActive >= 0 ? sugActive : 0]); ev.preventDefault(); }
+            else if (ev.key === 'Escape') { hideSugg(); }
+        });
+        clearEl.addEventListener('click', clearSearch);
+        document.addEventListener('click', ev => { if (!ev.target.closest('.search-wrap')) hideSugg(); });
+        loadStreets();
 
         function start(lon, lat, msg) { userLocation = { lon, lat }; setStatus(msg); initMap(lon, lat); }
         if (navigator.geolocation) {
