@@ -528,6 +528,10 @@
             return (s || '').toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
         }
 
+        function fmtDist(d) {
+            return d < 950 ? `${Math.round(d)} m` : `${(d / 1000).toFixed(1)} km`;
+        }
+
         async function loadStreets() {
             try {
                 const r = await fetch('streets.json');
@@ -542,7 +546,7 @@
             suggEl.innerHTML = sugMatches.map((e, i) => `
                 <div class="sugg${i === sugActive ? ' active' : ''}" data-i="${i}">
                     <span class="nm">${titleCase(e.n)}${e.a ? `<span class="area"> · ${e.a}</span>` : ''}</span>
-                    <span class="cnt">${e.c} spot${e.c > 1 ? 's' : ''}</span>
+                    <span class="cnt">${e._d != null ? fmtDist(e._d) + ' · ' : ''}${e.c} spot${e.c > 1 ? 's' : ''}</span>
                 </div>`).join('');
             suggEl.style.display = 'block';
             suggEl.querySelectorAll('.sugg').forEach(el => {
@@ -556,9 +560,12 @@
             if (q.length < 2) { hideSugg(); return; }
             const m = [];
             for (const e of streetIndex) if (e.n.includes(q)) m.push(e);
+            const haveLoc = !!userLocation;
+            if (haveLoc) m.forEach(e => { e._d = getDistance(userLocation.lat, userLocation.lon, e.la, e.lo); });
             m.sort((a, b) =>
                 (a.n.startsWith(q) ? 0 : 1) - (b.n.startsWith(q) ? 0 : 1)
-                || b.c - a.c || a.n.localeCompare(b.n));
+                || (haveLoc ? a._d - b._d : b.c - a.c)
+                || a.n.localeCompare(b.n));
             sugMatches = m.slice(0, 12);
             sugActive = -1;
             renderSugg();
