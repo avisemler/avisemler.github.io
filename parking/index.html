@@ -96,6 +96,21 @@
         .sugg .cnt { color: var(--muted); font-size: 11.5px; white-space: nowrap; }
         #sidebar-title .area { font-weight: 400; color: var(--muted); font-size: 13px; }
 
+        /* Time control */
+        .timebar { background: #f8f9fa; border: 1px solid #eceff1; border-radius: 10px; padding: 10px 12px; margin-bottom: 16px; }
+        .tb-row { display: flex; align-items: center; gap: 8px; }
+        .tb-row select, .tb-row button { border: 1px solid #dadce0; border-radius: 8px; background: #fff; font-size: 12.5px; padding: 5px 7px; cursor: pointer; color: var(--ink); }
+        .tb-row input[type=range] { flex: 1; min-width: 0; accent-color: var(--brand); }
+        #tb-clock { font-weight: 700; font-variant-numeric: tabular-nums; font-size: 13px; min-width: 44px; text-align: center; }
+        #tb-now { font-weight: 600; color: var(--brand); }
+        #tb-now:hover { background: #eef3fe; }
+        .tb-hint { font-size: 11px; color: var(--muted); margin-top: 7px; }
+        .badge { display: inline-block; font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; vertical-align: middle; }
+        .badge.on  { background: #fde7ec; color: #c5221f; }
+        .badge.off { background: #e6f4ea; color: #137333; }
+        .badge.unk { background: #eceff1; color: #5f6368; }
+        .tb-hint .badge { margin: 0 2px; }
+
         /* Map controls */
         .map-btn {
             position: absolute; z-index: 2; background: #fff; border: none;
@@ -178,6 +193,15 @@
                 <input id="street-search" type="text" placeholder="Search a street…" autocomplete="off" spellcheck="false" />
                 <button id="search-clear" title="Clear search">✕</button>
                 <div id="suggestions"></div>
+            </div>
+            <div class="timebar">
+                <div class="tb-row">
+                    <select id="tb-day" title="Day of week"></select>
+                    <input id="tb-time" type="range" min="0" max="1425" step="15" title="Time of day">
+                    <span id="tb-clock">--:--</span>
+                    <button id="tb-now" title="Reset to right now">Now</button>
+                </div>
+                <div class="tb-hint">Cards show if each rule is <span class="badge on">🔴 in effect</span> or <span class="badge off">🟢 not now</span> at this time</div>
             </div>
             <div class="sidebar-head">
                 <h2 id="sidebar-title">Nearby Restrictions</h2>
@@ -400,6 +424,7 @@
 
         function refreshNearby() {
             if (!map) return;
+            rerender = refreshNearby;
             const list = document.getElementById('restrictions-list');
             const feats = dedupe(map.queryRenderedFeatures({ layers: QUERY_LAYERS }));
 
@@ -425,7 +450,7 @@
                          onclick="flyTo(${it.lon},${it.lat})">
                         <div class="restriction-street">${it.p.street_name || 'Unknown Street'}</div>
                         <div class="restriction-type">${it.p.restriction || it.p.order_type || 'No info'}</div>
-                        <div class="restriction-distance"><span class="pill">${it.p.side_of_road || 'N/A'}</span>${it.p.length ? `<span class="pill">${it.p.length} m</span>` : ''}</div>
+                        <div class="restriction-distance">${statusBadge(it.p)}<span class="pill">${it.p.side_of_road || 'N/A'}</span>${it.p.length ? `<span class="pill">${it.p.length} m</span>` : ''}</div>
                     </div>`).join('') + back;
                 return;
             }
@@ -449,7 +474,7 @@
                      onclick="flyTo(${it.lon},${it.lat})">
                     <div class="restriction-street">${it.p.street_name || 'Unknown Street'}</div>
                     <div class="restriction-type">${it.p.restriction || it.p.order_type || 'No info'}</div>
-                    <div class="restriction-distance">${Math.round(it.distance)} m away
+                    <div class="restriction-distance">${statusBadge(it.p)}${Math.round(it.distance)} m away
                         <span class="pill">${it.p.side_of_road || 'N/A'}</span></div>
                 </div>`).join('');
         }
@@ -461,7 +486,7 @@
             const feats = dedupe(map.queryRenderedFeatures(
                 [[e.point.x-b, e.point.y-b], [e.point.x+b, e.point.y+b]], { layers: QUERY_LAYERS }
             ));
-            if (openPopup) openPopup.remove();
+            if (openPopup) { openPopup.remove(); openPopup = null; }
             if (!feats.length) return;
 
             const ll = e.lngLat;
@@ -471,27 +496,32 @@
                          distance: getDistance(ll.lat, ll.lng, c[1], c[0]) };
             }).sort((a,b) => a.distance - b.distance).slice(0, 10);
 
+            rerender = () => paintSpot(items, ll);
+            paintSpot(items, ll);
+        }
+
+        function paintSpot(items, ll) {
+            if (openPopup) openPopup.remove();
             openPopup = new maplibregl.Popup({ maxWidth: '320px' }).setLngLat(ll).setHTML(`
                 <div style="max-height:300px;overflow-y:auto;min-width:230px">
                     <strong>🅿️ ${items.length} restriction${items.length>1?'s':''} here</strong>
                     ${items.map(it => `
                         <div style="padding:8px 10px;margin:7px 0;background:#f8f9fa;border-radius:8px;
                                     border-left:3px solid ${colorFor(it.p.restriction)};font-size:12.5px">
-                            <div style="font-weight:600">${it.p.street_name || 'Unknown Street'}</div>
+                            <div style="font-weight:600">${it.p.street_name || 'Unknown Street'} ${statusBadge(it.p)}</div>
                             <div style="color:#5f6368;margin:2px 0">${it.p.restriction || it.p.order_type || 'No info'}</div>
                             <div style="color:#1a73e8;font-size:11px">${it.p.side_of_road || 'N/A'}${it.p.length?` • ${it.p.length}m`:''}</div>
                         </div>`).join('')}
                 </div>`).addTo(map);
 
-            document.getElementById('sidebar-title').textContent = `At this spot`;
+            document.getElementById('sidebar-title').textContent = 'At this spot';
             setBadge(items.length);
-            const list = document.getElementById('restrictions-list');
-            list.innerHTML = items.map(it => `
+            document.getElementById('restrictions-list').innerHTML = items.map(it => `
                 <div class="restriction-item" style="border-left-color:${colorFor(it.p.restriction)}"
                      onclick="flyTo(${it.lon},${it.lat})">
                     <div class="restriction-street">${it.p.street_name || 'Unknown Street'}</div>
                     <div class="restriction-type">${it.p.restriction || it.p.order_type || 'No info'}</div>
-                    <div class="restriction-distance"><span class="pill">${it.p.side_of_road || 'N/A'}</span></div>
+                    <div class="restriction-distance">${statusBadge(it.p)}<span class="pill">${it.p.side_of_road || 'N/A'}</span></div>
                 </div>`).join('') +
                 `<div style="margin-top:14px"><button class="reset-btn" onclick="resetView()">← Show nearest to me</button></div>`;
         }
@@ -531,6 +561,84 @@
         function fmtDist(d) {
             return d < 950 ? `${Math.round(d)} m` : `${(d / 1000).toFixed(1)} km`;
         }
+
+        // ---------- Restriction schedule parsing ("is this rule in effect?") ----------
+        // Day index matches JS Date.getDay(): Sun=0 … Sat=6.
+        const DAYW = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 };
+        function normDay(s) { s = s.toLowerCase(); return s.startsWith('th') ? 'thu' : s.slice(0, 3); }
+
+        function parseTimeToken(tok, isEnd) {
+            tok = tok.trim().toLowerCase();
+            if (tok === 'midnight') return isEnd ? 1440 : 0;
+            if (tok === 'noon') return 720;
+            const m = tok.match(/^(\d{1,2})(?:[.:](\d{2}))?\s*(am|pm)?$/);
+            if (!m) return null;
+            let h = +m[1]; const min = m[2] ? +m[2] : 0, ap = m[3];
+            if (ap === 'am' && h === 12) h = 0;
+            else if (ap === 'pm' && h !== 12) h += 12;
+            return h * 60 + min;
+        }
+
+        function parseRanges(t) {
+            const re = /(\d{1,2}(?:[.:]\d{2})?\s*(?:am|pm)|midnight|noon)\s*(?:-|to|–|—)\s*(\d{1,2}(?:[.:]\d{2})?\s*(?:am|pm)|midnight|noon)/gi;
+            const out = []; let m;
+            while ((m = re.exec(t))) {
+                const s = parseTimeToken(m[1], false), e = parseTimeToken(m[2], true);
+                if (s != null && e != null) out.push([s, e]);
+            }
+            return out;
+        }
+
+        function parseDays(t) {
+            const d = '(mon|tues?|wed|thu(?:rs?)?|fri|sat|sun)';
+            const r = t.match(new RegExp(d + '[a-z]*\\s*(?:-|to|–|—)\\s*' + d, 'i'));
+            if (r) {
+                const a = DAYW[normDay(r[1])], b = DAYW[normDay(r[2])], days = [];
+                let i = a;
+                for (let k = 0; k < 7; k++) { days.push(i); if (i === b) break; i = (i + 1) % 7; }
+                return days;
+            }
+            const re = new RegExp('\\b' + d + '\\b', 'gi'), days = new Set(); let m;
+            while ((m = re.exec(t))) days.add(DAYW[normDay(m[1])]);
+            return days.size ? [...days] : null;
+        }
+
+        function parseSchedule(text) {
+            const t = (text || '').toLowerCase();
+            if (!t) return { unknown: true };
+            if (t.includes('at any time')) return { always: true };
+            // "event days" apply only on match/event days — we can't know if today is
+            // one, so don't pretend to; show the raw text as "times vary".
+            if (t.includes('event')) return { unknown: true };
+            const ranges = parseRanges(t);
+            if (!ranges.length) return { unknown: true };
+            return { days: parseDays(t) || [0, 1, 2, 3, 4, 5, 6], ranges };
+        }
+
+        // Returns true (in effect), false (not now), or null (couldn't tell)
+        function isActive(s, d, min) {
+            if (s.always) return true;
+            if (s.unknown) return null;
+            if (!s.days.includes(d)) return false;
+            return s.ranges.some(([a, b]) => min >= a && min < b);
+        }
+
+        let evalOverride = null; // {d, min} when the user scrubs the time; null = live "now"
+        function currentEval() {
+            if (evalOverride) return evalOverride;
+            const now = new Date();
+            return { d: now.getDay(), min: now.getHours() * 60 + now.getMinutes() };
+        }
+
+        function statusBadge(p) {
+            const s = parseSchedule(p.restriction || p.order_type || '');
+            const ev = currentEval(), a = isActive(s, ev.d, ev.min);
+            if (a === null) return '<span class="badge unk" title="No clear time in the rule — check the sign">⚪ times vary</span>';
+            return a ? '<span class="badge on">🔴 in effect</span>'
+                     : '<span class="badge off">🟢 not now</span>';
+        }
+
+        let rerender = null; // re-draws the current sidebar view when the time changes
 
         async function loadStreets() {
             try {
@@ -604,6 +712,35 @@
         clearEl.addEventListener('click', clearSearch);
         document.addEventListener('click', ev => { if (!ev.target.closest('.search-wrap')) hideSugg(); });
         loadStreets();
+
+        // ---------- Time-of-day control ----------
+        function initTimeBar() {
+            const daySel = document.getElementById('tb-day');
+            const timeEl = document.getElementById('tb-time');
+            const clock  = document.getElementById('tb-clock');
+            const nowBtn = document.getElementById('tb-now');
+            const DAYS = [['Mon', 1], ['Tue', 2], ['Wed', 3], ['Thu', 4], ['Fri', 5], ['Sat', 6], ['Sun', 0]];
+            daySel.innerHTML = DAYS.map(([n, v]) => `<option value="${v}">${n}</option>`).join('');
+            const fmt = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+
+            function syncToNow() {
+                const now = new Date();
+                daySel.value = now.getDay();
+                timeEl.value = Math.round((now.getHours() * 60 + now.getMinutes()) / 15) * 15;
+                clock.textContent = fmt(+timeEl.value);
+                evalOverride = null;
+            }
+            function onChange() {
+                evalOverride = { d: +daySel.value, min: +timeEl.value };
+                clock.textContent = fmt(+timeEl.value);
+                if (rerender) rerender();
+            }
+            daySel.addEventListener('change', onChange);
+            timeEl.addEventListener('input', onChange);
+            nowBtn.addEventListener('click', () => { syncToNow(); if (rerender) rerender(); });
+            syncToNow();
+        }
+        initTimeBar();
 
         function start(lon, lat, msg) { userLocation = { lon, lat }; setStatus(msg); initMap(lon, lat); }
         if (navigator.geolocation) {
