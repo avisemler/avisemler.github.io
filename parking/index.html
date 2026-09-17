@@ -170,26 +170,59 @@
         }
         #toast.show { opacity: 1; }
 
+        /* Bottom-sheet bits — only used on mobile (see media query) */
+        #legend-btn { display: none; }        /* desktop keeps the always-open legend */
+        .sheet-handle { display: none; }       /* desktop has no drag handle */
+
         @media (max-width: 768px) {
-            #header { padding: 10px 16px; }
-            #header h1 { font-size: 17px; }
-            #header .subtitle { display: none; }       /* reclaim vertical space */
-            #status { font-size: 11.5px; padding: 5px 10px; }
-            #main { flex-direction: column; }
-            #map { min-height: 40dvh; }                 /* keep the map usable */
-            #sidebar {
-                width: 100%; max-height: 52dvh; padding: 14px 14px 24px;
-                border-left: none; border-top: 1px solid #e3e3e3;
+            /* Full-screen map; the sidebar becomes a draggable bottom sheet. */
+            #header { display: none; }
+            #main { position: relative; }
+            #map { position: absolute; inset: 0; }
+            #toast { display: none; }
+            .maplibregl-ctrl-top-left { display: none; }          /* pinch-zoom instead */
+            .maplibregl-ctrl-bottom-right { bottom: 136px; z-index: 6; }  /* keep attribution above the peek */
+
+            /* Search floats over the map (JS reparents it into #map on mobile) */
+            .search-wrap { position: absolute; top: 10px; left: 10px; right: 10px; margin: 0; z-index: 6; }
+            #street-search {
+                font-size: 16px;                        /* stop iOS focus auto-zoom */
+                background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,.20);
             }
+            #suggestions { box-shadow: 0 10px 28px rgba(0,0,0,.24); }
+
+            /* Map buttons tucked under the search bar, opposite corners */
+            #locate-btn { top: 62px; left: 10px; right: auto; padding: 9px 12px; }
+            #legend-btn { display: flex; top: 62px; right: 10px; padding: 9px 12px; }
+
+            /* Filter legend as a toggled popover */
             .legend {
-                bottom: 12px; right: 10px; padding: 10px 12px;
-                min-width: 0; font-size: 12px;
+                display: none; position: absolute; top: 104px; right: 10px; bottom: auto;
+                min-width: 0; font-size: 12.5px; max-height: 55dvh; overflow-y: auto;
             }
+            .legend.show { display: block; }
             .legend .hint { display: none; }
-            .legend-item { padding: 5px 6px; }          /* larger tap targets */
-            #locate-btn { top: 10px; right: 10px; padding: 9px 12px; }
-            /* 16px stops iOS auto-zooming (and reflowing) the page on focus */
-            #street-search { font-size: 16px; }
+            .legend-item { padding: 6px 6px; }
+
+            /* ---- Bottom sheet ---- */
+            #sidebar {
+                position: fixed; left: 0; right: 0; bottom: 0; width: 100%;
+                height: 90dvh; max-height: 90dvh;
+                display: flex; flex-direction: column; padding: 0 16px 20px;
+                border: none; border-radius: 18px 18px 0 0; background: #fff;
+                box-shadow: 0 -6px 28px rgba(0,0,0,.20); overflow: hidden; z-index: 5;
+                transition: transform .3s cubic-bezier(.32,.72,0,1); will-change: transform;
+                transform: translateY(72%);   /* start near the peek; JS refines exactly */
+            }
+            #sidebar.dragging { transition: none; }
+            .sheet-handle { display: block; order: 0; flex: none; padding: 10px 0 8px; touch-action: none; cursor: grab; }
+            .sheet-handle .grip { display: block; width: 40px; height: 5px; margin: 0 auto; background: #d0d3d7; border-radius: 999px; }
+            .sidebar-head { order: 1; flex: none; margin: 2px 0 12px; touch-action: none; }
+            .timebar { order: 2; flex: none; margin-bottom: 12px; }
+            #restrictions-list {
+                order: 3; flex: 1 1 auto; min-height: 0; overflow-y: auto;
+                overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding-bottom: 8px;
+            }
         }
     </style>
 </head>
@@ -204,6 +237,7 @@
     <div id="main">
         <div id="map">
             <button id="locate-btn" class="map-btn" title="Centre on my location">📍 Locate me</button>
+            <button id="legend-btn" class="map-btn" title="Filter restriction types">🎚️ Filter</button>
             <div id="toast">💡 Tip: click anywhere on the map to inspect that spot</div>
             <div class="legend" id="legend">
                 <h3>Restriction Types</h3>
@@ -212,6 +246,7 @@
             </div>
         </div>
         <div id="sidebar">
+            <div class="sheet-handle" id="sheet-handle"><span class="grip"></span></div>
             <div class="search-wrap">
                 <span class="search-icon">🔍</span>
                 <input id="street-search" type="text" placeholder="Search a street…" autocomplete="off" spellcheck="false" />
@@ -548,9 +583,13 @@
                     <div class="restriction-distance">${statusBadge(it.p)}<span class="pill">${it.p.side_of_road || 'N/A'}</span></div>
                 </div>`).join('') +
                 `<div style="margin-top:14px"><button class="reset-btn" onclick="resetView()">← Show nearest to me</button></div>`;
+            setSheet('half'); // surface what the user just tapped
         }
 
-        function flyTo(lon, lat) { map.flyTo({ center: [lon, lat], zoom: 18, speed: 1.4 }); }
+        function flyTo(lon, lat) {
+            map.flyTo({ center: [lon, lat], zoom: 18, speed: 1.4 });
+            setSheet('peek'); // reveal the map on mobile after picking a card
+        }
 
         function resetView() {
             if (openPopup) openPopup.remove();
@@ -712,6 +751,8 @@
             streetMarker = new maplibregl.Marker({ color: '#e91e63' }).setLngLat([e.lo, e.la]).addTo(map);
             if (openPopup) { openPopup.remove(); openPopup = null; }
             map.flyTo({ center: [e.lo, e.la], zoom: 16.5, speed: 1.5 });
+            searchEl.blur(); // close the mobile keyboard so the sheet/map are visible
+            setSheet('half'); // show the street's restrictions
             setTimeout(refreshNearby, 650); // in case moveend fires before tiles paint
         }
 
@@ -765,6 +806,87 @@
             syncToNow();
         }
         initTimeBar();
+
+        // ---------- Mobile: full-screen map + draggable bottom sheet ----------
+        const mq = window.matchMedia('(max-width: 768px)');
+        const sheetEl   = document.getElementById('sidebar');
+        const handleEl  = document.getElementById('sheet-handle');
+        const headEl    = document.querySelector('.sidebar-head');
+        const searchWrap = document.querySelector('.search-wrap');
+        const mapDiv    = document.getElementById('map');
+        const searchHome = searchWrap.nextSibling; // where it lives on desktop (before timebar)
+        const legendEl  = document.getElementById('legend');
+        const legendBtn = document.getElementById('legend-btn');
+
+        let snaps = { full: 0, half: 0, peek: 0 }, sheetPos = 'peek', lastTranslate = 0;
+
+        function computeSnaps() {
+            const h = sheetEl.offsetHeight;
+            const peekVisible = handleEl.offsetHeight + headEl.offsetHeight + 18;
+            snaps = { full: 0, half: Math.round(h * 0.45), peek: Math.round(h - peekVisible) };
+        }
+        function setSheet(state) {
+            if (!mq.matches) return;
+            computeSnaps();
+            sheetPos = state;
+            lastTranslate = snaps[state];
+            sheetEl.style.transform = `translateY(${lastTranslate}px)`;
+        }
+
+        // Drag handling on the grab area (handle + header)
+        let dragging = false, dragStartY = 0, dragBase = 0;
+        function dragDown(e) {
+            if (!mq.matches) return;
+            dragging = true; computeSnaps();
+            dragStartY = e.clientY; dragBase = snaps[sheetPos];
+            sheetEl.classList.add('dragging');
+            try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+        }
+        function dragMove(e) {
+            if (!dragging) return;
+            let y = dragBase + (e.clientY - dragStartY);
+            y = Math.max(snaps.full, Math.min(snaps.peek, y));
+            lastTranslate = y;
+            sheetEl.style.transform = `translateY(${y}px)`;
+            e.preventDefault();
+        }
+        function dragUp() {
+            if (!dragging) return;
+            dragging = false;
+            sheetEl.classList.remove('dragging');
+            let best = 'peek', bestD = Infinity;
+            for (const k of ['full', 'half', 'peek']) {
+                const d = Math.abs(snaps[k] - lastTranslate);
+                if (d < bestD) { bestD = d; best = k; }
+            }
+            setSheet(best);
+        }
+        [handleEl, headEl].forEach(el => el.addEventListener('pointerdown', dragDown));
+        window.addEventListener('pointermove', dragMove, { passive: false });
+        window.addEventListener('pointerup', dragUp);
+        window.addEventListener('pointercancel', dragUp);
+
+        // Legend toggle (mobile popover)
+        legendBtn.addEventListener('click', e => { e.stopPropagation(); legendEl.classList.toggle('show'); });
+        document.addEventListener('click', e => {
+            if (mq.matches && !e.target.closest('#legend') && !e.target.closest('#legend-btn'))
+                legendEl.classList.remove('show');
+        });
+
+        function applyLayout() {
+            if (mq.matches) {
+                if (searchWrap.parentNode !== mapDiv) mapDiv.appendChild(searchWrap);
+                setSheet('peek');
+            } else {
+                if (searchWrap.parentNode !== sheetEl) sheetEl.insertBefore(searchWrap, searchHome);
+                sheetEl.style.transform = '';
+                legendEl.classList.remove('show');
+            }
+            if (map) map.resize();
+        }
+        mq.addEventListener('change', applyLayout);
+        window.addEventListener('resize', () => { if (mq.matches && !dragging) setSheet(sheetPos); });
+        applyLayout();
 
         function start(lon, lat, msg) { userLocation = { lon, lat }; setStatus(msg); initMap(lon, lat); }
         if (navigator.geolocation) {
