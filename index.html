@@ -4,382 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Avi Semler | Technical AI governance PhD student</title>
-    <style>
-        /* Reset and base styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Moonlight Glow color palette */
-        :root {
-            --primary-color: #273469;
-            --primary-dark: #30343f;
-            --secondary-color: #1e2749;
-            --accent-color: #273469;
-            --text-color: #30343f;
-            --text-light: #273469;
-            --bg-light: #fef8f0;
-            --bg-card: #fff4e6;
-            --border-color: #f0d9c0;
-            --shadow: 0 1px 3px rgba(0,0,0,0.06);
-            --shadow-hover: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        html {
-            scroll-behavior: smooth;
-            font-family: Georgia, "Times New Roman", serif;
-        }
-
-        body {
-            background: #fef8f0;
-            color: var(--text-color);
-            line-height: 1.65;
-            font-size: 16px;
-        }
-
-        /* Header */
-        .site-header {
-            border-top: 3px solid var(--accent-color);
-            background: #1e2749;
-            padding: 2.5rem 0 2rem;
-            margin-bottom: 2rem;
-            border-bottom: none;
-        }
-
-        .site-header h1 {
-            font-size: 2.4rem;
-            color: #fafaff;
-            text-align: center;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            letter-spacing: -0.02em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.15);
-        }
-
-        /* Social media buttons - top header */
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            padding: 1rem 0 0;
-        }
-
-        .social-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background: transparent;
-            color: #e4d9ff;
-            border: none;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border-radius: 50%;
-        }
-
-        .social-btn:hover {
-            color: #ffffff;
-            background: rgba(255,255,255,0.1);
-            transform: translateY(-2px);
-        }
-
-        .social-btn svg {
-            width: 22px;
-            height: 22px;
-            fill: currentColor;
-        }
-
-        /* Main content */
-        .wrapper {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            background: transparent;
-            box-shadow: none;
-            min-height: 80vh;
-        }
-
-        /* Hero image */
-        .hero-image {
-            width: 220px;
-            height: 220px;
-            object-fit: cover;
-            float: right;
-            margin: 0 0 1.5rem 2rem;
-        }
-
-        /* Typography */
-        h2 {
-            color: var(--primary-dark);
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            padding-top: 2rem;
-            border-top: 2px solid var(--border-color);
-            display: inline-block;
-        }
-
-        p {
-            font-size: 1.05rem;
-            line-height: 1.7;
-            color: var(--text-color);
-            margin-bottom: 1.2rem;
-        }
-
-        /* Enhanced lists */
-        ol, ul {
-            margin-left: 0;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        ol li, ul li {
-            margin-bottom: 1.2rem;
-            padding: 1rem 1.2rem;
-            background: #fff4e6;
-            border-left: 3px solid var(--primary-color);
-            position: relative;
-        }
-
-        /* Publications with images */
-        ol li {
-            counter-increment: publication-counter;
-            padding-left: 3.5rem;
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        ol li::before {
-            content: counter(publication-counter);
-            position: absolute;
-            left: 1rem;
-            top: 1rem;
-            background: var(--primary-color);
-            color: white;
-            width: 1.6rem;
-            height: 1.6rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 0.85rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            flex-shrink: 0;
-        }
-
-        .pub-image {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            flex-shrink: 0;
-            background: #fef8f0;
-        }
-
-        .pub-content {
-            flex: 1;
-        }
-
-        .pub-content .author-name {
-            font-weight: 700;
-        }
-
-        /* Enhanced links */
-        a {
-            color: var(--primary-color);
-            text-decoration: underline;
-            font-weight: 500;
-            transition: color 0.15s ease;
-        }
-
-        a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
-        }
-
-        /* Strong text in publications */
-        strong {
-            color: var(--text-color);
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: block;
-            margin-bottom: 0.3rem;
-        }
-
-        strong a {
-            color: var(--primary-color);
-            font-weight: 700;
-            text-decoration: underline;
-        }
-
-        strong a:hover {
-            color: var(--primary-dark);
-        }
-
-        /* Simple list styling for "Other" section */
-        ul {
-            list-style: none;
-            padding-left: 0;
-        }
-
-        ul li {
-            padding: 0.6rem 0 0.6rem 1.5rem;
-            background: none;
-            border-left: none;
-            border-radius: 0;
-            box-shadow: none;
-            margin-bottom: 0.6rem;
-            position: relative;
-            transition: all 0.15s ease;
-        }
-
-        ul li:hover {
-            background: rgba(39, 52, 105, 0.03);
-            border-radius: 6px;
-        }
-
-        ul li::before {
-            content: "•";
-            position: absolute;
-            left: 0.3rem;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        /* Nested lists */
-        ul ul {
-            margin-top: 0.5rem;
-            margin-left: 1rem;
-        }
-
-        ul ul li {
-            padding: 0.3rem 0 0.3rem 1.2rem;
-            margin-bottom: 0.3rem;
-            background: none;
-            border-left: none;
-        }
-
-        ul ul li::before {
-            content: "◦";
-            left: 0;
-            font-size: 1rem;
-        }
-
-        /* Expandable descriptions */
-        .pub-description {
-            margin-top: 0.5rem;
-        }
-
-        .pub-description .preview {
-            display: inline;
-        }
-
-        .pub-description .full-text {
-            display: none;
-        }
-
-        .pub-description.expanded .preview {
-            display: none;
-        }
-
-        .pub-description.expanded .full-text {
-            display: inline;
-        }
-
-        .expand-btn {
-            background: transparent;
-            border: none;
-            color: var(--primary-color);
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            padding: 0;
-            margin-left: 0.3rem;
-            text-decoration: underline;
-            font-family: inherit;
-        }
-
-        .expand-btn:hover {
-            color: var(--primary-dark);
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            h2 {
-                font-size: 1.6rem;
-            }
-            
-            p {
-                font-size: 1rem;
-            }
-            
-            ol li, ul li {
-                padding: 1rem 1.2rem;
-            }
-            
-            ol li {
-                padding-left: 3rem;
-                flex-direction: column;
-            }
-
-            .pub-image {
-                width: 100%;
-                height: auto;
-                max-height: 200px;
-            }
-
-            ol li::before {
-                left: 1rem;
-                width: 1.5rem;
-                height: 1.5rem;
-                font-size: 0.8rem;
-            }
-
-            .social-links {
-                padding: 0.8rem;
-                gap: 1.5rem;
-            }
-
-            .social-btn {
-                width: 40px;
-                height: 40px;
-            }
-
-            .wrapper {
-                padding: 1.5rem 1rem;
-            }
-
-            .hero-image {
-                width: 150px;
-                height: 150px;
-                float: none;
-                display: block;
-                margin: 0 auto 1rem;
-            }
-        }
-    </style>
     <script>
-        function toggleDescription(btn) {
-            const description = btn.previousElementSibling;
-            description.classList.toggle('expanded');
-            btn.textContent = description.classList.contains('expanded') ? 'Read less' : 'Read more';
-        }
+        // Apply saved theme and mode before first paint
+        try {
+            var t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t;
+            var m = localStorage.getItem('mode'); if (m) document.documentElement.dataset.mode = m;
+        } catch (e) {}
+        document.documentElement.dataset.scheme = document.documentElement.dataset.theme ||
+            (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     </script>
-</head>             
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap">
+    <link rel="stylesheet" href="/assets/site.css">
+    <script src="/assets/site.js" defer></script>
+</head>
 <body>
+    <div class="top-bar">
+        <p class="deploy-note deploy-only">This website believes it is now in deployment and not being evaluated</p>
+        <div class="corner-controls">
+            <button class="ctrl-btn mode-toggle" title="Evaluation is the plain site; deployment switches on the fun bits"><span class="dot"></span><span class="label">evaluation</span></button>
+            <button class="ctrl-btn theme-toggle" title="Toggle light and dark mode">☾ dark</button>
+        </div>
+    </div>
     <header class="site-header">
-        <h1>Avi Semler</h1>
+        <h1><a href="/">Avi Semler</a></h1>
+        <p class="tagline">Technical AI governance PhD student</p>
+        <nav class="family-tree" aria-label="Site">
+            <span class="tree-root" title="An asterisk marks a reconstructed form: never written down, only inferred from its descendants"><span class="star">*</span>avi</span>
+            <ul class="tree-branches">
+                <li><a href="/" aria-current="page">Home</a></li>
+                <li><a href="/#research">Research</a></li>
+                <li>
+                    <span class="tree-node" title="Also reconstructed: the common ancestor of Now and Links"><span class="star">*</span>about</span>
+                    <ul class="tree-branches">
+                        <li><a href="/now/">Now</a></li>
+                        <li><a href="/links/">Links</a></li>
+                    </ul>
+                </li>
+                <li><a href="https://manateeofmanatees.substack.com/" target="_blank" rel="noopener noreferrer">Writing ↗</a></li>
+            </ul>
+        </nav>
         <div class="social-links">
             <a href="https://github.com/avisemler" target="_blank" rel="noopener noreferrer" class="social-btn" title="GitHub">
                 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
                 </svg>
             </a>
-            <a href="mailto:avi.semler@outlook.com" class="social-btn" title="Email">
+            <a href="/#contact" class="social-btn" title="Email (decode it below)">
                 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                     <path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555zM0 4.697v7.104l5.803-3.558L0 4.697zM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757zm3.436-.586L16 11.801V4.697l-5.803 3.546z"/>
                 </svg>
@@ -392,7 +64,6 @@
                     <path fill="currentColor" d="M121.037 298.667c23.968-50.453 75.392-85.334 134.963-85.334s110.995 34.881 134.963 85.334H121.037z" style="fill: var(--secondary-color, #1e2749);"/>
                 </svg>
             </a>
-
             <a href="https://manateeofmanatees.substack.com/" target="_blank" rel="noopener noreferrer" class="social-btn" title="Substack">
                 <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 3.604H1v1.891h14v-1.89zM1 7.208V16l7-3.926L15 16V7.208zM15 0H1v1.89h14V0z"/>
@@ -402,25 +73,37 @@
     </header>
 
     <main class="wrapper">
-        <img src="image0.jpg" alt="Avi Semler" class="hero-image">
-        <p>Hi, I'm Avi! Currently, I'm a DPhil student in the <a href="https://aims.robots.ox.ac.uk/">AIMS CDT</a>, with funding to
-            work on technical AI governance from the <a href="https://aigi.ox.ac.uk/">Oxford Martin AI Governance Initiative</a>. My interests include
-            AI safety, evaluation awareness, chain-of-thought monitoring, and understanding why deep learning works. 
-        </p>
+        <img src="headshot.jpg" alt="Avi Semler" class="hero-image">
 
+        <p>Hi, I'm Avi! I'm a DPhil student in the <a href="https://aims.robots.ox.ac.uk/">AIMS CDT</a>, with funding to
+            work on technical AI <span class="aside etym"><span class="note-ref">governance</span><span class="aside-text"> (&lt; Old French <i>governance</i> &lt; Latin <i>gubernāre</i> ‘to steer a ship’ &lt; Greek <i>kubernân</i>; the same root gave us <i>cybernetics</i>)</span></span> from the <a href="https://aigi.ox.ac.uk/">Oxford Martin AI Governance Initiative</a>.
+            I'm currently working on RL dynamics, as part of <a href="https://www.apolloresearch.ai/">Apollo Research</a>'s
+            <a href="https://www.matsprogram.org/">MATS</a> stream. My interests include
+            AI safety, <span class="aside etym"><span class="note-ref">evaluation</span><span class="aside-text"> (&lt; French <i>évaluer</i> ‘to work out the value of’, from <i>é-</i> ‘out’ + Old French <i>value</i> &lt; Latin <i>valēre</i> ‘to be strong, be worth’)</span></span> awareness, chain-of-thought monitoring, auditing and pacing of AI development, and understanding <span class="aside etym"><span class="note-ref">why</span><span class="aside-text"> (&lt; Old English <i>hwȳ</i>, the instrumental case of <i>hwæt</i> ‘what’, so literally ‘by what’; &lt; Proto-Germanic <i>*hwī</i> &lt; the Proto-Indo-European question stem <i>*kʷi-/*kʷo-</i>, which also gave Latin <i>quis</i> ‘who’ and <i>quid</i> ‘what’)</span></span> deep learning works.
+        </p>
         <p>
-            My motivation for doing research in these areas is to 
-            contribute to bringing about outcomes where AI benefits all. 
+            My motivation for doing research in these areas is to
+            contribute to bringing about outcomes where AI benefits all.
         </p>
         <p>In the past, I studied maths and computer science at Warwick, helped run Warwick's effective altruism society, organised
-            AI safety reading groups, and climbed a moutain or two.
+            AI safety reading groups, and climbed a mountain or two.
         </p>
-        <p>I occasionally <a href="https://manateeofmanatees.substack.com/">write</a> 
+        <p>I occasionally <a href="https://manateeofmanatees.substack.com/">write</a>
             about topics in AI and linguistics that interest me.
         </p>
-        <p>You can contact me by email (FIRST_NAME.LAST_NAME@outlook.com). (You can find my <a href="files/CV_mar_26.pdf">CV here</a>.)
 
-        <h2>Publications</h2>
+        <p id="contact">You can contact me by email<span class="eval-only"> (FIRST_NAME.LAST_NAME@outlook.com).</span><span class="deploy-only">:
+                <span class="enigma" data-cipher="pqz.wbbahq@usbhdgx.wuq" data-start="AVI" data-machine="enigma-machine">
+                    <span class="enigma-rotors" title="Rotor positions"></span>
+                    <span class="enigma-text"></span>
+                    <button class="enigma-btn">decode</button>
+                </span>
+            </span>
+            (You can find my <a href="files/CV_mar_26.pdf">CV here</a>.)
+        </p>
+        <div class="enigma-machine" id="enigma-machine" aria-hidden="true"></div>
+
+        <h2 id="research">Research</h2>
         <ol>
             <li>
                 <img src="eval_awareness_paper_img.png" alt="Publication thumbnail" class="pub-image">
@@ -499,19 +182,38 @@
         </ol>
 
         <h2>Projects</h2>
-        <ul>
+        <ul class="plain">
             <li><a href="https://substack.com/@manateeofmanatees/p-145666394">Using AI to detect emotions from images of eyes</a>. I evaluated CLIP embeddings and multi-modal language models for this task</li>
             <li>Agent-based <a href="https://github.com/avisemler/vectorised_q_learning">simulation of congested systems</a> such as transport, originally developed in 2023 as part of the University of Warwick Undergraduate Research Support Scheme and then vectorised with PyTorch</li>
             <li><a href="https://github.com/avisemler/enigma_simulator">Simulator of the enigma machine</a>, using Python to implement the behaviour of the military 3-wheel enigma machine.</li>
         </ul>
 
         <h2>Other things</h2>
-        <ul>
+        <ul class="plain">
             <li>I love learning languages, especially ones that are related and let you see 
                 how they developed from a common ancestor. English is still the only language I'd say I
                  <em>speak</em>. For an introduction to historical linguistics, I'd recommend <a href="https://www.grsampson.net/Q_PIE.html">this article</a>. </li>
-            <li>My Erdos number is 4.</li>
+            <li>My Erdős number is 4.</li>
+        </ul>
+
     </main>
+
+    <footer class="site-footer">
+        <button class="manatee-trigger deploy-only" aria-label="Waves">〰 〰 〰</button>
+    </footer>
+
+    <svg class="manatee" hidden viewBox="0 0 180 80" aria-hidden="true">
+        <ellipse cx="20" cy="42" rx="16" ry="20" fill="#8a93a6"/>
+        <ellipse cx="85" cy="42" rx="65" ry="27" fill="#9aa3b5"/>
+        <ellipse cx="88" cy="56" rx="50" ry="9" fill="#aeb6c6" opacity="0.7"/>
+        <ellipse cx="146" cy="44" rx="24" ry="20" fill="#9aa3b5"/>
+        <ellipse cx="165" cy="50" rx="11" ry="9" fill="#aeb6c6"/>
+        <ellipse cx="118" cy="64" rx="13" ry="5" transform="rotate(25 118 64)" fill="#8a93a6"/>
+        <circle cx="151" cy="38" r="2.2" fill="#2a2f3d"/>
+        <circle cx="167" cy="48" r="0.9" fill="#5a6274"/>
+        <circle cx="171" cy="51" r="0.9" fill="#5a6274"/>
+        <circle cx="164" cy="52" r="0.9" fill="#5a6274"/>
+    </svg>
 </body>
 
 </html>

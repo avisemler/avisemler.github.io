@@ -1,0 +1,1019 @@
+/* Shared styles for every page. Palette carries over the original navy-and-cream site. */
+
+:root {
+    --bg: #fef8f0;
+    --bg-card: #fff4e6;
+    --text: #30343f;
+    --muted: #5c6178;
+    --primary: #273469;
+    --primary-strong: #1e2749;
+    --border: #f0d9c0;
+    --header-bg: #1e2749;
+    --header-text: #fafaff;
+    --header-soft: #e4d9ff;
+    --hover-tint: rgba(39, 52, 105, 0.05);
+
+    --font-display: "Fraunces", Georgia, serif;
+    --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --bg: #12162b;
+        --bg-card: #1a1f3a;
+        --text: #e6e3f2;
+        --muted: #a8a6c2;
+        --primary: #c9b8ff;
+        --primary-strong: #e4d9ff;
+        --border: #2c3358;
+        --header-bg: #0b0e1f;
+        --hover-tint: rgba(201, 184, 255, 0.06);
+    }
+}
+
+:root[data-theme="dark"] {
+    --bg: #12162b;
+    --bg-card: #1a1f3a;
+    --text: #e6e3f2;
+    --muted: #a8a6c2;
+    --primary: #c9b8ff;
+    --primary-strong: #e4d9ff;
+    --border: #2c3358;
+    --header-bg: #0b0e1f;
+    --hover-tint: rgba(201, 184, 255, 0.06);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.15s ease;
+}
+
+a:hover {
+    color: var(--primary-strong);
+}
+
+/* ---------- Corner controls ---------- */
+
+/* A row above the header that is always present, so the buttons never move when
+   the deployment note appears or the theme changes */
+.top-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 0.6rem 0.75rem;
+    padding: 0.9rem 1rem 0;
+    background: var(--header-bg);
+}
+
+.corner-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* same box metrics as .ctrl-btn so the row height doesn't change when it appears */
+.deploy-note {
+    margin-right: auto;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: normal;
+    letter-spacing: 0.04em;
+    color: #f0a54a;
+    border: 1px solid currentColor;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+}
+
+.ctrl-btn {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    color: var(--header-soft);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(228, 217, 255, 0.25);
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Fixed widths so swapping a label (dark/light, evaluation/deployment) doesn't resize the button */
+.theme-toggle {
+    min-width: 5.75rem;
+}
+
+.mode-toggle {
+    min-width: 8.75rem;
+}
+
+.ctrl-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+}
+
+.mode-toggle .dot {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #7fd99a;
+    margin-right: 0.4rem;
+    vertical-align: 0.05rem;
+}
+
+html[data-mode="deploy"] .mode-toggle .dot {
+    background: #e0912f;
+    animation: blink 1.6s ease-in-out infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.25; }
+}
+
+/* ---------- Evaluation / deployment mode ----------
+   Evaluation (the default) is the plain site. Deployment switches on the fun
+   bits: the Enigma email, clickable notes and the manatee. */
+
+.deploy-only {
+    display: none;
+}
+
+html[data-mode="deploy"] .deploy-only {
+    display: revert;
+}
+
+html[data-mode="deploy"] .eval-only {
+    display: none;
+}
+
+/* In evaluation mode, noted words read as ordinary text */
+html:not([data-mode="deploy"]) .note-ref {
+    text-decoration: none;
+    cursor: auto;
+}
+
+html:not([data-mode="deploy"]) .note-ref:hover {
+    color: inherit;
+}
+
+html:not([data-mode="deploy"]) .aside-text {
+    display: none !important;
+}
+
+/* ---------- Header ---------- */
+
+.site-header {
+    position: relative;
+    background: var(--header-bg);
+    padding: 1.25rem 1rem 1.75rem;
+    text-align: center;
+}
+
+.site-header h1 {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 600;
+    color: var(--header-text);
+    letter-spacing: -0.01em;
+}
+
+.site-header h1 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.tagline {
+    color: var(--header-soft);
+    font-style: italic;
+    margin-top: 0.15rem;
+}
+
+/* Navigation drawn as a language family tree: a reconstructed root with daughter branches */
+.family-tree {
+    margin: 1.4rem auto 0;
+    color: var(--header-soft);
+}
+
+/* Reconstructed (starred) nodes: the root, and intermediate subgroups like *about */
+.tree-root,
+.tree-node {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    padding: 0.1rem 0.6rem;
+    border: 1px dashed rgba(228, 217, 255, 0.45);
+    border-radius: 4px;
+    cursor: help;
+}
+
+.tree-branches {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding-top: 1rem;
+    position: relative;
+}
+
+/* vertical stem from the root */
+.tree-branches::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 0.5rem;
+    border-left: 1px solid rgba(228, 217, 255, 0.45);
+}
+
+.tree-branches li {
+    position: relative;
+    padding: 0.5rem 0.9rem 0;
+}
+
+/* horizontal bar, drawn per branch so it spans first to last child */
+.tree-branches li::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid rgba(228, 217, 255, 0.45);
+}
+
+.tree-branches li:first-child::before {
+    left: 50%;
+}
+
+.tree-branches li:last-child::before {
+    right: 50%;
+}
+
+/* drop from bar to each daughter */
+.tree-branches li::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 0.5rem;
+    border-left: 1px solid rgba(228, 217, 255, 0.45);
+}
+
+.tree-branches a {
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--header-soft);
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.tree-branches a:hover,
+.tree-branches a[aria-current="page"] {
+    color: #ffffff;
+    border-bottom-color: var(--header-soft);
+}
+
+/* Social icons are secondary: small and dim under the tree */
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding-top: 1.1rem;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--header-soft);
+    opacity: 0.7;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.social-btn:hover {
+    opacity: 1;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.social-btn svg {
+    width: 17px;
+    height: 17px;
+    fill: currentColor;
+}
+
+/* ---------- Main content ---------- */
+
+.wrapper {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 3rem;
+    min-height: 70vh;
+}
+
+.wrapper p {
+    margin-bottom: 1.1rem;
+}
+
+h2 {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--primary-strong);
+    margin: 2.75rem 0 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 2px solid var(--border);
+}
+
+.hero-image {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    float: right;
+    margin: 0 0 1.5rem 2rem;
+}
+
+/* ---------- Asides: inline notes that open in place ---------- */
+
+.note-ref {
+    cursor: pointer;
+    text-decoration: underline dotted;
+    text-decoration-color: var(--primary);
+    text-underline-offset: 3px;
+}
+
+.note-ref:hover {
+    color: var(--primary);
+}
+
+.aside-text {
+    display: none;
+    color: var(--muted);
+    font-size: 0.92em;
+}
+
+.note-ref[aria-expanded="true"] + .aside-text {
+    display: inline;
+    animation: fade-in 0.25s ease;
+}
+
+/* Etymology notes look like dictionary entries */
+.etym .note-ref {
+    text-decoration-style: wavy;
+    text-decoration-thickness: 1px;
+}
+
+.etym .aside-text {
+    font-family: var(--font-mono);
+    font-size: 0.8em;
+}
+
+.etym .aside-text i {
+    font-family: var(--font-body);
+    font-size: 1.1em;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+}
+
+/* ---------- Enigma email ---------- */
+
+.enigma {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    vertical-align: middle;
+}
+
+.enigma-rotors {
+    display: inline-flex;
+    gap: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+}
+
+.enigma-rotors span {
+    display: inline-block;
+    width: 1.4rem;
+    text-align: center;
+    background: var(--primary-strong);
+    color: var(--bg);
+    border-radius: 3px;
+    transition: transform 0.08s ease;
+}
+
+.enigma-rotors span.tick {
+    transform: translateY(-2px);
+}
+
+.enigma-text {
+    font-family: var(--font-mono);
+    font-size: 0.95rem;
+}
+
+.enigma-btn {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--primary);
+    background: transparent;
+    border: 1px solid var(--primary);
+    border-radius: 999px;
+    padding: 0.15rem 0.7rem;
+    cursor: pointer;
+}
+
+.enigma-btn:hover {
+    background: var(--hover-tint);
+}
+
+/* Schematic machine, opened by "decode" (deployment mode only) */
+.enigma-machine {
+    --fwd: var(--primary);
+    --back: #e0912f;
+    display: none;
+    margin: -0.25rem 0 1.5rem;
+    padding: 1rem 1rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+html[data-mode="deploy"] .enigma-machine.open {
+    display: block;
+    animation: fade-in 0.3s ease;
+}
+
+.enigma-svg {
+    display: block;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    font-family: var(--font-mono);
+}
+
+.enigma-svg .part {
+    fill: var(--bg-card);
+    stroke: var(--muted);
+    stroke-width: 1;
+}
+
+.enigma-svg .part-label {
+    fill: var(--muted);
+    font-size: 13px;
+    text-anchor: middle;
+}
+
+.enigma-svg .part-label.small {
+    font-size: 11px;
+}
+
+.enigma-svg .window {
+    fill: var(--primary-strong);
+}
+
+.enigma-svg .window-letter {
+    fill: var(--bg);
+    font-size: 14px;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+.enigma-svg .wire {
+    fill: none;
+    stroke-width: 2;
+}
+
+.enigma-svg .wire.fwd {
+    stroke: var(--fwd);
+}
+
+.enigma-svg .wire.back,
+.enigma-svg .wire.turn {
+    stroke: var(--back);
+}
+
+.enigma-svg.pulse .wire {
+    stroke-dasharray: 6 4;
+    animation: signal 0.28s linear;
+}
+
+@keyframes signal {
+    from { stroke-dashoffset: 20; }
+    to { stroke-dashoffset: 0; }
+}
+
+.enigma-svg .badge circle {
+    fill: var(--bg);
+    stroke-width: 2;
+}
+
+.enigma-svg .badge.fwd circle {
+    stroke: var(--fwd);
+}
+
+.enigma-svg .badge.back circle {
+    stroke: var(--back);
+}
+
+.enigma-svg .badge text {
+    fill: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+    text-anchor: middle;
+}
+
+/* Lampboard in the real Enigma's QWERTZ layout */
+.lampboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-top: 0.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+}
+
+.lampboard div {
+    display: flex;
+    gap: 4px;
+}
+
+.lampboard span {
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    color: var(--muted);
+}
+
+.lampboard span.pressed {
+    border-color: var(--fwd);
+    color: var(--fwd);
+    font-weight: 700;
+}
+
+.lampboard span.lit {
+    background: var(--back);
+    border-color: var(--back);
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 0 10px var(--back);
+}
+
+.enigma-caption {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin: 0.6rem 0 0 !important;
+}
+
+/* ---------- Publications ---------- */
+
+ol {
+    list-style: none;
+    counter-reset: publication-counter;
+}
+
+ol li {
+    counter-increment: publication-counter;
+    position: relative;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1.2rem;
+    padding: 1rem 1.2rem 1rem 3.5rem;
+    background: var(--bg-card);
+    border-left: 3px solid var(--primary);
+}
+
+ol li::before {
+    content: counter(publication-counter);
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: var(--bg);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.pub-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: #fef8f0;
+}
+
+.pub-content {
+    flex: 1;
+}
+
+.pub-content strong {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+}
+
+.pub-content strong + br {
+    display: none;
+}
+
+.pub-content .author-name {
+    font-weight: 700;
+}
+
+.pub-description {
+    margin-top: 0.5rem;
+}
+
+.pub-description .full-text,
+.pub-description.expanded .preview {
+    display: none;
+}
+
+.pub-description.expanded .full-text {
+    display: inline;
+}
+
+.expand-btn {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    padding: 0;
+}
+
+/* ---------- Plain lists ---------- */
+
+ul.plain {
+    list-style: none;
+}
+
+ul.plain li {
+    position: relative;
+    padding: 0.6rem 0 0.6rem 1.5rem;
+    margin-bottom: 0.4rem;
+    border-radius: 6px;
+    transition: background 0.15s ease;
+}
+
+ul.plain li:hover {
+    background: var(--hover-tint);
+}
+
+ul.plain li::before {
+    content: "•";
+    position: absolute;
+    left: 0.3rem;
+    color: var(--primary);
+}
+
+/* ---------- Footer and manatee ---------- */
+
+.site-footer {
+    text-align: center;
+    padding: 2rem 1rem 2.5rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+.manatee-trigger {
+    font: inherit;
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+}
+
+.manatee {
+    position: fixed;
+    bottom: 1.5rem;
+    left: -220px;
+    width: 180px;
+    z-index: 20;
+    pointer-events: none;
+}
+
+.manatee.swimming {
+    animation: swim 9s linear forwards;
+}
+
+@keyframes swim {
+    0%   { transform: translate(0, 0) rotate(0deg); }
+    25%  { transform: translate(calc(25vw + 55px), -14px) rotate(-3deg); }
+    50%  { transform: translate(calc(50vw + 110px), 0) rotate(2deg); }
+    75%  { transform: translate(calc(75vw + 165px), -14px) rotate(-3deg); }
+    100% { transform: translate(calc(100vw + 240px), 0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    html[data-mode="deploy"] .mode-toggle .dot {
+        animation: none;
+    }
+
+    .enigma-svg.pulse .wire {
+        animation: none;
+    }
+
+    .manatee.swimming {
+        animation: none;
+        left: 50%;
+        margin-left: -90px;
+    }
+
+}
+
+/* Where the deployment note can't fit beside the buttons (it needs ~800px), it drops
+   below them instead, so the buttons stay on the first row */
+@media (max-width: 860px) {
+    .deploy-note {
+        order: 1;
+        width: 100%;
+        margin-right: 0;
+        text-align: center;
+        border-radius: 12px;
+    }
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 640px) {
+    body {
+        font-size: 16px;
+    }
+
+
+    .site-header h1 {
+        font-size: 2.1rem;
+    }
+
+    .tree-branches li {
+        padding: 0.5rem 0.35rem 0;
+    }
+
+    .tree-branches a {
+        font-size: 0.95rem;
+    }
+
+    .wrapper {
+        padding: 1.75rem 1rem 2.5rem;
+    }
+
+    .hero-image {
+        float: none;
+        display: block;
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 1.25rem;
+    }
+
+    ol li {
+        flex-direction: column;
+        padding-left: 3rem;
+    }
+
+    .pub-image {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+    }
+}
+
+/* ==========================================================================
+   Refreshed light mode: paper and ink, with a rubric-red accent.
+   Applies only in light mode. data-scheme is set by the inline head script and
+   site.js.
+   ========================================================================== */
+
+html[data-scheme="light"] {
+    --bg: #f8f4ec;
+    --text: #1f2333;
+    --muted: #5b5f70;
+    --primary: #273469;
+    --primary-strong: #1a2040;
+    --border: #e0d6c4;
+    --rubric: #a63d2a;
+    --hover-tint: rgba(166, 61, 42, 0.05);
+}
+
+/* 4. Paper: a barely-there grain over the warm off-white */
+html[data-scheme="light"] body {
+    background-color: var(--bg);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.27 0 0 0 0 0.16 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* 1. Header sits on the paper, drawn in ink */
+html[data-scheme="light"] .site-header,
+html[data-scheme="light"] .top-bar {
+    background: transparent;
+}
+
+html[data-scheme="light"] .enigma-machine {
+    --back: var(--rubric);
+}
+
+html[data-scheme="light"] .deploy-note {
+    color: #9a6614;
+}
+
+/* The rule under the header spans the text column only. Drawn as a pseudo-element so
+   the header itself stays full width and the corner buttons don't move between themes. */
+html[data-scheme="light"] .site-header::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(calc(860px - 3rem), calc(100% - 2rem));
+    border-bottom: 1px solid var(--border);
+}
+
+html[data-scheme="light"] .site-header h1 {
+    color: var(--primary-strong);
+}
+
+html[data-scheme="light"] .tagline {
+    color: var(--muted);
+}
+
+html[data-scheme="light"] .ctrl-btn {
+    color: var(--primary);
+    background: transparent;
+    border-color: rgba(39, 52, 105, 0.25);
+}
+
+html[data-scheme="light"] .ctrl-btn:hover {
+    color: var(--rubric);
+    border-color: var(--rubric);
+    background: transparent;
+}
+
+/* 2. Rubric red for the tree's lines and the asterisks of reconstructed forms */
+html[data-scheme="light"] .family-tree {
+    color: var(--primary);
+}
+
+html[data-scheme="light"] .tree-root,
+html[data-scheme="light"] .tree-node {
+    border-color: rgba(166, 61, 42, 0.5);
+    color: var(--primary-strong);
+}
+
+html[data-scheme="light"] .star {
+    color: var(--rubric);
+}
+
+html[data-scheme="light"] .tree-branches::before,
+html[data-scheme="light"] .tree-branches li::before,
+html[data-scheme="light"] .tree-branches li::after {
+    border-color: rgba(166, 61, 42, 0.55);
+}
+
+html[data-scheme="light"] .tree-branches a {
+    color: var(--primary-strong);
+}
+
+html[data-scheme="light"] .tree-branches a:hover,
+html[data-scheme="light"] .tree-branches a[aria-current="page"] {
+    color: var(--primary-strong);
+    border-bottom-color: var(--rubric);
+}
+
+html[data-scheme="light"] .social-btn {
+    color: var(--primary);
+    opacity: 0.6;
+}
+
+html[data-scheme="light"] .social-btn:hover {
+    color: var(--rubric);
+    opacity: 1;
+    background: var(--hover-tint);
+}
+
+/* 5. Section headings as small-capital rubrics */
+html[data-scheme="light"] h2 {
+    font-family: var(--font-body);
+    font-variant: small-caps;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--rubric);
+    border-top: 1px solid var(--border);
+}
+
+html[data-scheme="light"] h2::before {
+    content: "§ ";
+    font-variant: normal;
+}
+
+/* 6. Calmer links: hairline underline, thickening to red on hover */
+html[data-scheme="light"] .wrapper a {
+    color: var(--primary);
+    text-decoration-thickness: 1px;
+    text-decoration-color: rgba(39, 52, 105, 0.35);
+}
+
+html[data-scheme="light"] .wrapper a:hover {
+    text-decoration-color: var(--rubric);
+    text-decoration-thickness: 2px;
+}
+
+html[data-scheme="light"] .note-ref {
+    text-decoration-color: var(--rubric);
+}
+
+/* 3. Publications as ruled dictionary entries with numbers in the margin */
+html[data-scheme="light"] ol li {
+    background: none;
+    border-left: none;
+    border-top: 1px solid var(--border);
+    margin-bottom: 0;
+    padding: 1.4rem 0 1.4rem 2.75rem;
+}
+
+/* rules only between entries; the heading's own rule already sits above the first */
+html[data-scheme="light"] ol li:first-child {
+    border-top: none;
+}
+
+html[data-scheme="light"] ol li::before {
+    left: 0;
+    top: 1.3rem;
+    width: auto;
+    height: auto;
+    background: none;
+    color: var(--rubric);
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+/* 7. Thumbnails in greyscale until hovered (pointer devices only; touch keeps colour) */
+html[data-scheme="light"] .pub-image {
+    mix-blend-mode: multiply;
+}
+
+@media (hover: hover) {
+    html[data-scheme="light"] .pub-image {
+        filter: grayscale(1) contrast(0.95);
+        transition: filter 0.3s ease;
+    }
+
+    html[data-scheme="light"] ol li:hover .pub-image {
+        filter: none;
+    }
+}
+
+@media (max-width: 640px) {
+    html[data-scheme="light"] ol li {
+        padding-left: 2.25rem;
+    }
+}
