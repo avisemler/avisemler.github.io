@@ -24,7 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const themeBtn = document.querySelector('.theme-toggle');
     const isDark = () => root.dataset.theme === 'dark' ||
         (!root.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
-    const labelTheme = () => { themeBtn.textContent = isDark() ? '☀ light' : '☾ dark'; };
+    // Shows the current theme, like the mode button shows the current mode
+    const labelTheme = () => {
+        themeBtn.textContent = isDark() ? '☾ dark' : '☀ light';
+        themeBtn.setAttribute('aria-pressed', String(isDark()));
+    };
     const syncScheme = () => { root.dataset.scheme = isDark() ? 'dark' : 'light'; };
     matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         syncScheme();
