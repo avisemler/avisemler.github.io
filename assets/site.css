@@ -828,7 +828,7 @@ ul.plain li::before {
 }
 
 /* ==========================================================================
-   Refreshed light mode: paper and ink, with a rubric-red accent.
+   Refreshed light mode: paper and ink, with a navy accent.
    Applies only in light mode. data-scheme is set by the inline head script and
    site.js.
    ========================================================================== */
@@ -840,8 +840,8 @@ html[data-scheme="light"] {
     --primary: #273469;
     --primary-strong: #1a2040;
     --border: #e0d6c4;
-    --rubric: #a63d2a;
-    --hover-tint: rgba(166, 61, 42, 0.05);
+    --accent: #273469;
+    --hover-tint: rgba(39, 52, 105, 0.05);
 }
 
 /* 4. Paper: a barely-there grain over the warm off-white */
@@ -857,7 +857,7 @@ html[data-scheme="light"] .top-bar {
 }
 
 html[data-scheme="light"] .enigma-machine {
-    --back: var(--rubric);
+    --back: #b7791f;
 }
 
 html[data-scheme="light"] .deploy-note {
@@ -891,30 +891,30 @@ html[data-scheme="light"] .ctrl-btn {
 }
 
 html[data-scheme="light"] .ctrl-btn:hover {
-    color: var(--rubric);
-    border-color: var(--rubric);
+    color: var(--accent);
+    border-color: var(--accent);
     background: transparent;
 }
 
-/* 2. Rubric red for the tree's lines and the asterisks of reconstructed forms */
+/* 2. Navy accent for the tree's lines and the asterisks of reconstructed forms */
 html[data-scheme="light"] .family-tree {
     color: var(--primary);
 }
 
 html[data-scheme="light"] .tree-root,
 html[data-scheme="light"] .tree-node {
-    border-color: rgba(166, 61, 42, 0.5);
+    border-color: rgba(39, 52, 105, 0.45);
     color: var(--primary-strong);
 }
 
 html[data-scheme="light"] .star {
-    color: var(--rubric);
+    color: var(--accent);
 }
 
 html[data-scheme="light"] .tree-branches::before,
 html[data-scheme="light"] .tree-branches li::before,
 html[data-scheme="light"] .tree-branches li::after {
-    border-color: rgba(166, 61, 42, 0.55);
+    border-color: rgba(39, 52, 105, 0.5);
 }
 
 html[data-scheme="light"] .tree-branches a {
@@ -924,7 +924,7 @@ html[data-scheme="light"] .tree-branches a {
 html[data-scheme="light"] .tree-branches a:hover,
 html[data-scheme="light"] .tree-branches a[aria-current="page"] {
     color: var(--primary-strong);
-    border-bottom-color: var(--rubric);
+    border-bottom-color: var(--accent);
 }
 
 html[data-scheme="light"] .social-btn {
@@ -933,19 +933,19 @@ html[data-scheme="light"] .social-btn {
 }
 
 html[data-scheme="light"] .social-btn:hover {
-    color: var(--rubric);
+    color: var(--accent);
     opacity: 1;
     background: var(--hover-tint);
 }
 
-/* 5. Section headings as small-capital rubrics */
+/* 5. Section headings in small capitals */
 html[data-scheme="light"] h2 {
     font-family: var(--font-body);
     font-variant: small-caps;
     font-size: 1.3rem;
     font-weight: 600;
     letter-spacing: 0.08em;
-    color: var(--rubric);
+    color: var(--accent);
     border-top: 1px solid var(--border);
 }
 
@@ -954,7 +954,7 @@ html[data-scheme="light"] h2::before {
     font-variant: normal;
 }
 
-/* 6. Calmer links: hairline underline, thickening to red on hover */
+/* 6. Calmer links: hairline underline, thickening on hover */
 html[data-scheme="light"] .wrapper a {
     color: var(--primary);
     text-decoration-thickness: 1px;
@@ -962,12 +962,12 @@ html[data-scheme="light"] .wrapper a {
 }
 
 html[data-scheme="light"] .wrapper a:hover {
-    text-decoration-color: var(--rubric);
+    text-decoration-color: var(--accent);
     text-decoration-thickness: 2px;
 }
 
 html[data-scheme="light"] .note-ref {
-    text-decoration-color: var(--rubric);
+    text-decoration-color: var(--accent);
 }
 
 /* 3. Publications as ruled dictionary entries with numbers in the margin */
@@ -990,7 +990,7 @@ html[data-scheme="light"] ol li::before {
     width: auto;
     height: auto;
     background: none;
-    color: var(--rubric);
+    color: var(--accent);
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 600;
